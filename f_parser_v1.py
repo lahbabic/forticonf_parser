@@ -144,20 +144,30 @@ class Address_group:
         self.group_name = group_name
         self.members = []
 
-    def add_member(member=""):
+    def add_member(self, member=""):
         self.members.append(member)
 
     def get_members():
         return self.members
 
+    def __str__(self):
+        return 'name : '+ self.group_name +"\n"+\
+                'members:' + ' '.join( self.members )
+
+
 class File_parser():
     """ parse a configuration file and create needed objects"""
     def __init__(self, file_name=""):
         self.file_name = file_name
+        # list containing Network_addr objects
         self.list_of_netAddresses = []
+        # list containing Address_group objects
+        self.list_of_addrGrp = []
+        # list containing the members of an group
+        self.list_of_members = []
         self.conf_addr = False
         self.conf_addrgrp = False
-        #name of network address or of the address group
+        # name of network address or of the address group
         self.name = ""
         self.addrtype = ""
         self.comment = ""
@@ -196,6 +206,10 @@ class File_parser():
                 # pop the 'comment' keyword
                 args.pop(0)
                 self.comment = ' '.join(args)
+        if self.conf_addrgrp:
+            # pop the 'member' keyword
+            args.pop(0)
+            self.list_of_members = args
 
     def next_action( self ):
         """ create the correspondent objects with the gathered information
@@ -207,14 +221,20 @@ class File_parser():
                 self.net_addr.set_comment( self.comment )
             # append the newly created network address in the tuple
             self.list_of_netAddresses.append( self.net_addr )
+        if self.conf_addrgrp:
+            self.addr_grp = Address_group( self.name )
+            #ajout de tout les membres à l'objet addr_grp
+            [ self.addr_grp.add_member( member.strip('"') )
+                                for member in self.list_of_members ]
+            self.list_of_addrGrp.append( self.addr_grp )
 
     def end_action( self ):
-        """ reinit all attributes"""
+        """ reinit all attributes """
         self.addrtype, self.name, self.comment = "", "", ""
         self.x, self.y = "", ""
         self.conf_addr = False
         self.conf_addrgrp = False
-        self.list_of_netAddresses = []
+        self.list_of_members = []
 
     def parse( self ):
         """ read lines from config file and parse information """
@@ -239,6 +259,10 @@ class File_parser():
         """ return a list of network address objects """
         return self.list_of_netAddresses
 
+    def get_list_of_addrGrp( self ):
+        """ return a list of address group objects """
+        return self.list_of_addrGrp
+
 def main():
     if len(sys.argv) < 2:
         print("You should provide a configuration file as an argument as follows:")
@@ -250,9 +274,9 @@ def main():
 
     file_parser = File_parser( config_file )
     file_parser.parse()
-    tuple = file_parser.get_list_of_netAdresses()
+    netAddr_list = file_parser.get_list_of_netAdresses()
+    addrGrp_list = file_parser.get_list_of_addrGrp()
 
-    [ print(addr) for addr in tuple ]
     print_done()
     csv_file = config_file.split(".")[0]+".csv"
     #print("Creating csv file : " + csv_file )

@@ -15,6 +15,9 @@ def print_err():
 
 class File_parser():
     """ parse a configuration file and create needed objects """
+
+
+    """ split this class into more subclasses """
     def __init__(self, file_name=""):
         self.file_name = file_name
         # list containing Network_addr objects

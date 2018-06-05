@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*
 
 from network.FWaddress import *
-from network.FWaddrgrp import *
+
 
 W = '\033[0m'   # white
 R = '\033[31m'  # red
@@ -29,12 +29,13 @@ class File_parser():
         self.name = ""
         self.addrtype = ""
         self.comment = ""
-        # network ip address
+        # network ip address | srcintf | srcaddr
         self.x = ""
-        # network mask
+        # network mask | dstintf | dstaddr
         self.y = ""
         # check if we are configuring Firewall
         self.fw = False
+        self.tmp = ""
 
     def get_line_from_file( self, file_name="", mode='r' ):
         """ function that returns line by line during file reading """
@@ -49,13 +50,13 @@ class File_parser():
             exit(1)
 
     def config_action( self, obj_to_conf='' ):
-        if obj_to_conf in ['address', 'addrgrp']:
+        if obj_to_conf in ['address', 'addrgrp', 'policy']:
             self.obj_to_conf = obj_to_conf
         else:
             print("\nObject "+B+ obj_to_conf+W+" unknown from the parser probably not yet implemented.")
 
     def edit_action( self, args=[] ):
-        if self.obj_to_conf in ['address', 'addrgrp']:
+        if self.obj_to_conf in ['address', 'addrgrp', 'policy']:
             self.name = ' '.join(args).strip('"')
         else:
             pass
@@ -83,6 +84,10 @@ class File_parser():
             # pop the 'member' keyword
             args.pop(0)
             self.list_of_members = args
+        elif self.obj_to_conf == 'policy':
+            """ continue here """
+            print(args)
+            print("\n")
         else:
             pass
 

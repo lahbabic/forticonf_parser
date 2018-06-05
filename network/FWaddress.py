@@ -134,3 +134,25 @@ class Network_addr:
         return 'name : '+ self.net_name\
             + '\n\t' + self.ip.get_x() + ' ' + self.ip.get_y()\
             + '\n\t' + self.comment
+
+
+class Address_group:
+    """ contain firewall addresses which are the members of this group """
+    def __init__(self, group_name=""):
+        self.group_name = group_name
+        self.members = []
+
+    def add_member(self, member=None):
+        self.members.append(member)
+
+    def get_name( self ):
+        return self.group_name
+
+    def get_members( self ):
+        return self.members
+
+    def __str__( self ):
+        return 'name : '+ self.group_name +"\n"+\
+                'members:' + ' '.join( self.members )
+
+                

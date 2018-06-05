@@ -7,6 +7,10 @@ import ipaddress
     or an IP address range. An IPv6 firewall address is an IPv6 address prefix
     source: http://help.fortinet.com/cli/fos50hlp/54/Content/FortiOS/fortiOS-cli-ref-54/config/firewall/address.htm """
 
+W = '\033[0m'   # white
+R = '\033[31m'  # red
+G = '\033[32m'  # green
+B = '\033[34m'  # blue
 
 def is_valid_ipmask(ipmask):
     """ check if ipv4/6 and mask are valid """
@@ -99,8 +103,12 @@ class Network_addr:
     comment = ""
     def __init__(self, net_name="", addrtype=""):
         self.net_name = net_name
+        self.addrtype = None
         if addrtype in self.addrtypes:
             self.addrtype = addrtype
+        else:
+            print("Address type "+B +addrtype+ W+" not implemented yet")
+
 
     def set_addr(self, x, y):
         if self.addrtype == 'ipmask':
@@ -108,7 +116,7 @@ class Network_addr:
         elif self.addrtype == 'iprange':
             self.ip = Iprange(x, y)
         else:
-            print("Address type not implemented yet")
+            pass
 
     def get_name(self):
         return self.net_name

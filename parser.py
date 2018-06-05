@@ -17,7 +17,10 @@ class File_parser():
     """ parse a configuration file and create needed objects """
 
 
-    """ split this class into more subclasses """
+    """ split this class into more subclasses
+        class for network address
+        class for policy
+        class for service"""
     def __init__(self, file_name=""):
         self.file_name = file_name
         # list containing Network_addr objects

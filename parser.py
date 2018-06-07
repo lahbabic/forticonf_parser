@@ -1,17 +1,21 @@
 #-*- coding: utf-8 -*
 
 from network.FWaddress import *
-
+from service.service import *
 
 W = '\033[0m'   # white
 R = '\033[31m'  # red
 G = '\033[32m'  # green
-B = '\033[34m'  # blue
+O = '\033[93m'  # orange
+B = '\033[94m'  # blue
+
 
 def print_done():
     print(W+"["+G+"done"+W+"]")
 def print_err():
     print(W+"["+R+"error"+W+"]")
+def print_warning():
+    print(W+"["+O+"warning"+W+"]")
 
 class File_reader():
     """
@@ -80,13 +84,15 @@ class File_parser():
         self.list_of_addrGrp = []
         # list containing the members of an group
         self.list_of_members = []
+        # list containing service objects
+        self.list_of_services = []
 
 
     def create_addrObj( self, lines=[] ):
         """
             create network address objects from lines
+            'firewall address'
         """
-
         if not lines:
             return None
 
@@ -96,7 +102,6 @@ class File_parser():
         args = []
 
         for line in lines:
-
             try:
                 command, *args = line.split()
             except:
@@ -138,6 +143,7 @@ class File_parser():
                     args = []
 
     def create_addrgrpObj( self, lines=[] ):
+        """ create 'firewall addrgrp' objects """
         if not lines:
             return None
 
@@ -172,11 +178,15 @@ class File_parser():
 
 
     def create_serviceCObj( self, lines=[] ):
+        """ create 'firewall service custom' objects """
         if not lines:
             return None
 
-        command, name, tmp = "", "", ""
+        command = ""
         args, service_list = [], []
+        service = {}
+        implemented_fields = ['name', 'explicit-proxy', 'protocol', 'protocol-number',
+                   'visibility', 'icmptype', 'icmpcode']
 
         for line in lines:
             try:
@@ -184,8 +194,29 @@ class File_parser():
             except:
                 pass
 
-            print( command )
-            print( args )
+            if command == 'edit':
+                service['name'] = args[0].strip('"')
+            elif command == 'set':
+                try:
+                    if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange':
+                        portrange_type = args[0]
+                        args.pop(0)
+                        service[ portrange_type ] = args
+                    elif args[0] in implemented_fields:
+                        service[ args[0] ] = args[1]
+                    else:
+                        print_warning()
+                        print("Can't set the field "+B+args[0]+W+", not implemented yet")
+                except:
+                    pass
+            elif command == 'unset':
+                """ need to implement this case"""
+                pass
+            elif command == "next":
+                service_Obj = None
+                service_Obj = Service( service )
+                self.list_of_services.append( service_Obj )
+                service.clear()
 
     def parse( self ):
         addrs_lines = self.file_reader.get_objects( 'address' )
@@ -196,7 +227,6 @@ class File_parser():
 
         serviceC_lines = self.file_reader.get_objects( 'service custom' )
         self.create_serviceCObj( serviceC_lines )
-        #[ print( line ) for line in serviceC_lines ]
 
 
 

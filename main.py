@@ -10,13 +10,15 @@ from optparse import OptionParser
 W = '\033[0m'   # white
 R = '\033[31m'  # red
 G = '\033[32m'  # green
-B = '\033[34m'  # blue
+O = '\033[93m'  # orange
+B = '\033[94m'  # blue
 
 def print_done():
     print(W+"["+G+"done"+W+"]")
 def print_err():
     print(W+"["+R+"error"+W+"]")
-
+def print_warning():
+    print(W+"["+O+"warning"+W+"]")
 
 def main():
     if len(sys.argv) < 2:
@@ -46,10 +48,10 @@ def main():
     """ for each address group, take their members and convert them into
         csv format stored as rows"""
 
-    rows = convert_addr_addrgrp_rows( file_parser, addrGrp_list, netAddr_list )
+    csv_writer = Csv_writer( options.csv_file )
+    rows = csv_writer.convert_addr_addrgrp_rows( file_parser, addrGrp_list, netAddr_list )
+    csv_writer.write_to_csv( "address", rows )
 
-    header =  ['Group', 'address/addrgrp', 'ip/ip_start', 'netmask/ip_end', 'description']
-    write_to_csv( options.csv_file, header, rows )
     print_done()
 
 if __name__ == '__main__':

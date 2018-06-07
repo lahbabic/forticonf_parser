@@ -10,7 +10,11 @@ import ipaddress
 W = '\033[0m'   # white
 R = '\033[31m'  # red
 G = '\033[32m'  # green
-B = '\033[34m'  # blue
+O = '\033[93m'  # orange
+B = '\033[94m'  # blue
+
+def print_warning():
+    print(W+"["+O+"warning"+W+"]")
 
 def is_valid_ipmask(ipmask):
     """ check if ipv4/6 and mask are valid """
@@ -107,7 +111,8 @@ class Network_addr:
         if addrtype in self.addrtypes:
             self.addrtype = addrtype
         else:
-            print("Address type "+B +addrtype+ W+" not implemented yet")
+            print_warning()
+            print("Address type "+O +addrtype+ W+" not implemented yet")
 
 
     def set_addr(self, x, y):
@@ -154,7 +159,7 @@ class Address_group:
 
     def get_members( self ):
         return self.members
-        
+
     def __str__( self ):
         if self.comment == "":
             return 'name: '+ self.group_name +"\n"+\

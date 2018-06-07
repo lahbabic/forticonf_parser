@@ -187,6 +187,9 @@ class File_parser():
         command = ""
         args, service_list = [], []
         service = {}
+        implemented_commands = ['config', 'edit', 'set', 'next']
+        unimplemented_fields = []
+        unimplemented_commands = []
         implemented_fields = ['name', 'explicit-proxy', 'protocol', 'protocol-number',
                    'visibility', 'icmptype', 'icmpcode']
 
@@ -200,25 +203,35 @@ class File_parser():
                 service['name'] = args[0].strip('"')
             elif command == 'set':
                 try:
+                    """
+                        This two fields can contain multiple entries
+                        store them into a list
+                    """
                     if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange':
                         portrange_type = args[0]
                         args.pop(0)
                         service[ portrange_type ] = args
                     elif args[0] in implemented_fields:
                         service[ args[0] ] = args[1]
-                    else:
-                        print_warning()
-                        print("Can't set the field "+B+args[0]+W+", not implemented yet")
+                    elif args[0] not in implemented_fields:
+                        if args[0] not in unimplemented_fields:
+                            print_warning()
+                            print("Can't set the field "+B+args[0]+W+", not implemented yet")
+                            unimplemented_fields.append( args[0] )
                 except:
                     pass
             elif command == 'unset':
-                """ need to implement this case"""
                 pass
-            elif command == "next":
+            elif command == 'next':
                 service_Obj = None
                 service_Obj = Service( service )
                 self.list_of_services.append( service_Obj )
                 service.clear()
+            if command not in implemented_commands:
+                if command not in unimplemented_commands:
+                    print_warning()
+                    print(B+command+W+" command not implemented yet")
+                    unimplemented_commands.append( command )
         print_done()
 
     def parse( self ):

@@ -141,18 +141,25 @@ class Address_group:
     def __init__(self, group_name=""):
         self.group_name = group_name
         self.members = []
+        self.comment = ""
 
     def add_member(self, member=None):
         self.members.append(member)
+
+    def set_comment( self, comment="" ):
+        self.comment = comment
 
     def get_name( self ):
         return self.group_name
 
     def get_members( self ):
         return self.members
-
+        
     def __str__( self ):
-        return 'name : '+ self.group_name +"\n"+\
-                'members:' + ' '.join( self.members )
-
-                
+        if self.comment == "":
+            return 'name: '+ self.group_name +"\n"+\
+                    'members:' + ' '.join( self.members ) + "\n"
+        else:
+            return 'name: '+ self.group_name +"\n"+\
+                    'members: ' + ' '.join( self.members ) +"\n"+\
+                    'comment: ' + self.comment + "\n"

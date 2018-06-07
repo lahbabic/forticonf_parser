@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*
 
-import csv, sys
+import sys
 from parser import *
+from csv_writer import *
 from optparse import OptionParser
 
 
@@ -16,25 +17,6 @@ def print_done():
 def print_err():
     print(W+"["+R+"error"+W+"]")
 
-def write_to_csv(csv_file="", header=[], rows=[]):
-    with open(csv_file, 'w', newline='') as csvfile:
-        fieldnames = header
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        writer.writeheader()
-        writer.writerows( rows )
-
-def convert_netAddr_to_row( group_name="", netAddr=None ):
-    """ convert a network address to row in csv format """
-    if type(netAddr) is not Network_addr:
-        return None
-    row = {}
-    row['Group'] = group_name
-    row['FWaddress name'] = netAddr.get_name()
-    row['ip/ip_start'], row['netmask/ip_end'] = netAddr.get_addr()
-    row['description'] = netAddr.get_comment()
-
-    return row
 
 def main():
     if len(sys.argv) < 2:
@@ -63,17 +45,12 @@ def main():
     print("Creating csv file : " + options.csv_file +"  ...", end="")
     """ for each address group, take their members and convert them into
         csv format stored as rows"""
-    rows = [ convert_netAddr_to_row( group.get_name(), file_parser.get_netAddr_byName(member) )
-                for group in addrGrp_list
-                        for member in group.get_members()
-                            if file_parser.get_netAddr_byName(member) != None]
 
-    #[ print(row) for row in rows ]
-    #[ print(addr) for addr in file_parser.get_list_of_netAdresses( )]
-    header =  ['Group', 'FWaddress name', 'ip/ip_start', 'netmask/ip_end', 'description']
+    rows = convert_addr_addrgrp_rows( file_parser, addrGrp_list, netAddr_list )
+
+    header =  ['Group', 'address/addrgrp', 'ip/ip_start', 'netmask/ip_end', 'description']
     write_to_csv( options.csv_file, header, rows )
     print_done()
-
 
 if __name__ == '__main__':
     main()

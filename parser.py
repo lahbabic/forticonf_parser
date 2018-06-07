@@ -44,8 +44,9 @@ class File_reader():
             if object in [address, addrgrp, policy, service, servicegrp]
         """
         if object not in ['address', 'addrgrp', 'policy', 'service custom', 'service group']:
+            print_warning()
+            print("Can't parse the object "+B+object+W+" from the file, not implemented yet")
             return None
-
         # set to True if 'object' is found
         object_found = False
         lines, service = [], []
@@ -69,7 +70,7 @@ class File_reader():
 
             if object_found == True:
                 lines.append( line.strip("\n").strip() )
-
+        print_done()
         return lines
 
 
@@ -141,6 +142,7 @@ class File_parser():
                     addrtype, name, x, y = "", "", "", ""
                     command, comment = "", ""
                     args = []
+        print_done()
 
     def create_addrgrpObj( self, lines=[] ):
         """ create 'firewall addrgrp' objects """
@@ -175,7 +177,7 @@ class File_parser():
                 # reinit variables
                 command, name, comment = "", "", ""
                 args, addrgrp_list = [], []
-
+        print_done()
 
     def create_serviceCObj( self, lines=[] ):
         """ create 'firewall service custom' objects """
@@ -217,17 +219,26 @@ class File_parser():
                 service_Obj = Service( service )
                 self.list_of_services.append( service_Obj )
                 service.clear()
+        print_done()
 
     def parse( self ):
+        print("File parsing for the"+B+" address"+W+" objects ...  ", end="" )
         addrs_lines = self.file_reader.get_objects( 'address' )
+
+        print("Creating address objects ...  ", end="" )
         self.create_addrObj( addrs_lines )
 
+        print("File parsing for the"+B+" addrgrp"+W+" objects ...  ", end="" )
         addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
+
+        print("Creating addrgrp objects ...  ", end="" )
         self.create_addrgrpObj( addrgrp_lines )
 
+        print("File parsing for the"+B+" service custom"+W+" ...  ", end="" )
         serviceC_lines = self.file_reader.get_objects( 'service custom' )
-        self.create_serviceCObj( serviceC_lines )
 
+        print("Creating service objects ...  ", end="" )
+        self.create_serviceCObj( serviceC_lines )
 
 
     def get_netAddr_byName( self, name="" ):

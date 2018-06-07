@@ -37,14 +37,12 @@ def main():
     if options.csv_file is None:
         options.csv_file = options.config_file.split(".")[0]+".csv"
 
-    print("Parsing configuration file " + options.config_file+" ...  ", end="" )
     file_parser = File_parser( options.config_file )
     file_parser.parse()
     netAddr_list = file_parser.get_list_of_netAdresses()
     addrGrp_list = file_parser.get_list_of_addrGrp()
-    print_done()
 
-    print("Creating csv file : " + options.csv_file +"  ...", end="")
+    print("Writing objects into csv file : " + options.csv_file +"  ...", end="")
     """ for each address group, take their members and convert them into
         csv format stored as rows"""
 

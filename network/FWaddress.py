@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*
-import ipaddress
+from ipaddress import ip_address
 
 """ firewall addresses used in firewall policies.
     An IPv4 firewall address is a set of one or more IP addresses,
@@ -19,7 +19,7 @@ def print_warning():
 def is_valid_ipmask(ipmask):
     """ check if ipv4/6 and mask are valid """
     try:
-        ipaddress.ip_address(ipmask)
+        ip_address(ipmask)
         return True
     except ValueError:
         return False
@@ -100,34 +100,32 @@ class Iprange(Network):
         Network.__init__(self, x, y)
 
 
+
 class Network_addr:
     """ is the name of the network/subnet/host, his type, ip and eventually a comment """
-    #all types of addresses
-    addrtypes = ['ipmask', 'iprange', 'fqdn', 'geography', 'wildcard', 'wildcard-fqdn']
-    comment = ""
-    def __init__(self, net_name="", addrtype=""):
-        self.net_name = net_name
-        self.addrtype = None
-        if addrtype in self.addrtypes:
-            self.addrtype = addrtype
-        else:
+
+    implemented_types = ['ipmask', 'iprange']
+    unimplemented_types = ['fqdn', 'geography', 'wildcard', 'wildcard-fqdn']
+    implemented_keys = ['name', 'type', 'ip', 'comment']
+
+    def __init__( self, dict={} ):
+        self.name = ""
+        self.type = ""
+        ''' tuple containing ip/mask or iprange for now '''
+        self.ip = None
+        self.comment = ""
+
+        keys = dict.keys()
+        if not is_valid_ipmask(dict['ip'][0]) or not is_valid_ipmask(dict['ip'][1]):
             print_warning()
-            print("Address type "+O +addrtype+ W+" not implemented yet")
+            print("Invalid ip/mask "+B+dict['ip'][0]+" "+dict['ip'][1]+W)
 
-
-    def set_addr(self, x, y):
-        if self.addrtype == 'ipmask':
-            self.ip = Ipmask(x, y)
-        elif self.addrtype == 'iprange':
-            self.ip = Iprange(x, y)
-        else:
-            pass
+        for key in keys:
+            if key in self.implemented_keys:
+                setattr(self, key, dict[ key ])
 
     def get_name(self):
-        return self.net_name
-
-    def set_comment(self, comment=""):
-        self.comment = comment
+        return self.name
 
     def get_addr(self):
         return self.ip.get_x(), self.ip.get_y()
@@ -135,10 +133,21 @@ class Network_addr:
     def get_comment(self):
         return self.comment
 
-    def __str__(self):
-        return 'name : '+ self.net_name\
-            + '\n\t' + self.ip.get_x() + ' ' + self.ip.get_y()\
-            + '\n\t' + self.comment
+    def __str__( self ):
+        """ create a printable representation of this object """
+        ret = ""
+        for key in self.implemented_keys:
+            value = getattr(self, key)
+            # if value is not None and is a list
+            if value and not isinstance(value, tuple):
+                ret += str(key)+': '+str(value)+'\n'
+            # if value is not None and is a list
+            else:
+                ret += str(key)+': '
+                for x in value:
+                    ret += str(x)+' '
+                ret += '\n'
+        return ret
 
 
 class Address_group:

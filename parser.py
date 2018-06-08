@@ -38,6 +38,7 @@ class File_reader():
             print("Failed to process file "+B+ self.file_name +W+"\n")
             exit(1)
 
+
     def get_objects( self, object='' ):
         """
             return a list containing all objects after 'config firewall object'
@@ -55,18 +56,16 @@ class File_reader():
             service = object.split()
 
         for line in self.get_line_from_file():
-            try:
+            if line:
                 action, *args = line.split()
-            except:
-                pass
 
-            if action == 'config' and args[0] == 'firewall':
+            if action == 'end':
+                object_found = False
+            elif action == 'config' and args[0] == 'firewall':
                 if len(service) == 2\
                         and service[0] and service[1] in args\
                         or object in args:
                     object_found = True
-            elif action == 'end':
-                object_found = False
 
             if object_found == True:
                 lines.append( line.strip("\n").strip() )
@@ -88,61 +87,6 @@ class File_parser():
         # list containing service objects
         self.list_of_services = []
 
-
-    def create_addrObj( self, lines=[] ):
-        """
-            create network address objects from lines
-            'firewall address'
-        """
-        if not lines:
-            return None
-
-        net_addr = None
-        addrtype, name, x, y = "", "", "", ""
-        command, comment = "", ""
-        args = []
-
-        for line in lines:
-            try:
-                command, *args = line.split()
-            except:
-                pass
-
-            if command == 'edit':
-                name = args[0].strip('"')
-            elif command == 'set':
-                if args[0] == 'subnet':
-                    addrtype = 'ipmask'
-                    # network ip address
-                    x = args[1]
-                    # network mask
-                    y = args[2]
-                elif args[0] == 'type':
-                    if args[1] in ['ipmask', 'iprange']:
-                        addrtype = args[1]
-                elif args[0] == 'start-ip':
-                    x = args[1]
-                elif args[0] == 'end-ip':
-                    y = args[1]
-                elif args[0] == 'comment':
-                    # pop the 'comment' keyword
-                    args.pop(0)
-                    comment = ' '.join(args)
-            elif command == 'next':
-                if addrtype:
-                    net_addr = Network_addr( name, addrtype )
-                    net_addr.set_addr( x, y )
-                    if comment != "":
-                        net_addr.set_comment( comment )
-                        comment = ""
-                    # append the newly created network address into the list
-                    self.list_of_netAddresses.append( net_addr )
-                    # reinit variables
-                    net_addr = None
-                    addrtype, name, x, y = "", "", "", ""
-                    command, comment = "", ""
-                    args = []
-        print_done()
 
     def create_addrgrpObj( self, lines=[] ):
         """ create 'firewall addrgrp' objects """
@@ -234,6 +178,59 @@ class File_parser():
                     unimplemented_commands.append( command )
         print_done()
 
+    def create_addrObj( self, lines=[] ):
+        """
+            create network address objects from lines
+            'firewall address'
+        """
+        if not lines:
+            return None
+
+        implemented_commands = ['config', 'edit', 'set', 'next']
+        unimplemented_commands = []
+
+        net_addr = {}
+        x = ""
+        command = ""
+        args = []
+
+        for line in lines:
+            try:
+                command, *args = line.split()
+            except:
+                pass
+
+            if command == 'edit':
+                net_addr['name'] = args[0].strip('"')
+            elif command == 'set':
+                if args[0] == 'subnet':
+                    net_addr['type'] = 'ipmask'
+                    net_addr['ip'] = (args[1], args[2])
+                elif args[0] == 'type' and args[1] == 'ipmask':
+                    net_addr['type'] = 'ipmask'
+                elif args[0] == 'type' and args[1] == 'iprange':
+                    net_addr['type'] = 'iprange'
+                elif args[0] == 'start-ip':
+                    x = args[1]
+                elif args[0] == 'end-ip':
+                    net_addr['ip'] = ( x, args[1])
+                elif args[0] == 'comment':
+                    # pop the 'comment' keyword
+                    args.pop(0)
+                    net_addr['comment'] = ' '.join(args)
+            elif command == 'next':
+                if net_addr.get('type'):
+                    addr = Network_addr( net_addr )
+
+            if command not in implemented_commands:
+                if command not in unimplemented_commands:
+                    print_warning()
+                    print(B+command+W+" command not implemented yet")
+                    unimplemented_commands.append( command )
+        print_done()
+
+    #0.20s
+    @profile
     def parse( self ):
         print("File parsing for the"+B+" address"+W+" objects ...  ", end="" )
         addrs_lines = self.file_reader.get_objects( 'address' )

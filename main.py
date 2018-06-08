@@ -20,6 +20,7 @@ def print_err():
 def print_warning():
     print(W+"["+O+"warning"+W+"]")
 
+
 def main():
     if len(sys.argv) < 2:
         print("You should provide a configuration file as an argument.")
@@ -40,15 +41,18 @@ def main():
     file_parser = File_parser( options.config_file )
     file_parser.parse()
     netAddr_list = file_parser.get_list_of_netAdresses()
-    addrGrp_list = file_parser.get_list_of_addrGrp()
 
     print("Writing objects into csv file : " + options.csv_file +"  ...", end="")
     """ for each address group, take their members and convert them into
         csv format stored as rows"""
 
-    csv_writer = Csv_writer( options.csv_file )
-    rows = csv_writer.convert_addr_addrgrp_rows( file_parser, addrGrp_list, netAddr_list )
-    csv_writer.write_to_csv( "address", rows )
+    rows = [Csv_writer().convert_addr_row( file_parser, group,\
+                            file_parser.get_list_of_netAdresses())
+            for group in file_parser.get_list_of_addrGrp() ]
+    """
+    rows = Csv_writer().convert_addr_rows( file_parser, addrGrp_list, netAddr_list )
+    """
+    Csv_writer().write_to_csv( options.csv_file, "address", rows )
 
     print_done()
 

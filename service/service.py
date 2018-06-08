@@ -41,10 +41,11 @@ class Service:
         # get all keys in dict, wich mean that this keys have defined values
         keys = dict.keys()
         for key in keys:
-            attr = key
-            if "-" in key:
-                attr = key.replace("-", "_")
-            setattr(self, attr, dict[ key ])
+            if key in self.implemented_keys:
+                attr = key
+                if "-" in key:
+                    attr = key.replace("-", "_")
+                setattr(self, attr, dict[ key ])
 
     def get_fields( self ):
         pass
@@ -58,7 +59,7 @@ class Service:
             if value and not isinstance(value, list):
                 ret += str(key)+': '+str(value)+'\n'
             # if value is not None and is a list
-            elif value and isinstance(value, list):
+            else:
                 ret += str(key)+': '
                 for x in value:
                     ret += str(x)+' '
@@ -67,3 +68,7 @@ class Service:
 
     def get_name( self ):
         return self.name
+
+
+class ServiceGrp:
+    pass

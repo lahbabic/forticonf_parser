@@ -14,7 +14,7 @@ class Csv_writer:
         fieldnames = []
 
         if objects_type == "address":
-            fieldnames = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'description']
+            fieldnames = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'Description']
         if objects_type == "service":
             pass
 
@@ -37,7 +37,7 @@ class Csv_writer:
             row['Group'] = group
             row['Hostname'] = netAddr.get_name()
             row['ip/ip_start'], row['netmask/ip_end'] = netAddr.get_addr()
-            row['description'] = netAddr.get_comment()
+            row['Description'] = netAddr.get_comment()
         return row
 
 

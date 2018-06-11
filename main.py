@@ -44,8 +44,9 @@ def main():
 
     """ for each address group, take their members and convert them into
         csv format stored as rows"""
+    groups = file_parser.get_list_of_addrGrp()
     csv_writer = Csv_writer( file_parser )
-    rows = csv_writer.get_addr_rows()
+    rows = csv_writer.addresses_to_rows( "", groups )
     csv_writer.write_to_csv( options.csv_file, "address", rows )
 
     print_done()

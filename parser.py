@@ -105,6 +105,7 @@ class File_parser():
                 pass
 
             if command == 'edit':
+
                 name = args[0].strip('"')
             elif command == 'set':
                 if args[0] == "member":
@@ -169,7 +170,6 @@ class File_parser():
             elif command == 'unset':
                 pass
             elif command == 'next':
-                service_Obj = None
                 service_Obj = Service( service )
                 self.list_of_services.append( service_Obj )
                 service.clear()
@@ -192,7 +192,7 @@ class File_parser():
         unimplemented_commands = []
 
         net_addr = {}
-        x = ""
+        x, y = "", ""
         command = ""
         args = []
 
@@ -215,21 +215,25 @@ class File_parser():
                 elif args[0] == 'start-ip':
                     x = args[1]
                 elif args[0] == 'end-ip':
-                    net_addr['ip'] = ( x, args[1])
+                    y = args[1]
                 elif args[0] == 'comment':
                     # pop the 'comment' keyword
                     args.pop(0)
                     net_addr['comment'] = ' '.join(args)
             elif command == 'next':
                 if net_addr.get('type'):
+                    if net_addr['type'] == 'iprange':
+                        net_addr['ip'] = (x, y)
                     addr = Network_addr( net_addr )
                     self.list_of_netAddresses.append(addr)
-
+                    x, y = "", ""
+                    net_addr.clear()
             if command not in implemented_commands:
                 if command not in unimplemented_commands:
                     print_warning()
                     print(B+command+W+" command not implemented yet")
                     unimplemented_commands.append( command )
+
         print_done()
 
     def create_serviceGObj( self, lines=[] ):

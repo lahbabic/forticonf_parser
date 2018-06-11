@@ -33,7 +33,6 @@ class Service:
             UDP services, the destination and source port ranges.
         '''
         self.udp_portrange = []
-        ''' '''
         self.sctp_portrange = []
         ''' visibility to include this service in firewall policy service selection '''
         self.visibility = ""
@@ -41,29 +40,27 @@ class Service:
         # get all keys in dict, wich mean that this keys have defined values
         keys = dict.keys()
         for key in keys:
-            if key in self.implemented_keys:
-                attr = key
-                if "-" in key:
-                    attr = key.replace("-", "_")
+            attr = key
+            if "-" in key:
+                attr = key.replace("-", "_")
+            if attr in self.implemented_keys:
                 setattr(self, attr, dict[ key ])
-
-    def get_fields( self ):
-        pass
 
     def __str__( self ):
         """ create a printable representation of this object"""
         ret = ""
         for key in self.implemented_keys:
-            value = getattr(self, key)
-            # if value is not None and is a list
-            if value and not isinstance(value, list):
-                ret += str(key)+': '+str(value)+'\n'
-            # if value is not None and is a list
-            else:
-                ret += str(key)+': '
-                for x in value:
-                    ret += str(x)+' '
-                ret += '\n'
+            if hasattr(self, key):
+                value = getattr(self, key)
+                # if value is not None and is not a list
+                if value and not isinstance(value, list):
+                    ret += str(key)+': '+str(value)+'\n'
+                # if value is not None and is a list
+                elif value and isinstance(value, list):
+                    ret += str(key)+': '
+                    for x in value:
+                        ret += str(x)+' '
+                    ret += '\n'
         return ret
 
     def get_name( self ):

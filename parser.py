@@ -154,7 +154,8 @@ class File_parser():
                         This two fields can contain multiple entries
                         store them into a list
                     """
-                    if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange':
+                    if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange' or\
+                    args[0] == 'sctp-portrange':
                         portrange_type = args[0]
                         args.pop(0)
                         service[ portrange_type ] = args
@@ -172,6 +173,7 @@ class File_parser():
             elif command == 'next':
                 service_Obj = Service( service )
                 self.list_of_services.append( service_Obj )
+                portrange_type = ""
                 service.clear()
             if command not in implemented_commands:
                 if command not in unimplemented_commands:
@@ -317,3 +319,7 @@ class File_parser():
     def get_list_of_addrGrp( self ):
         """ return a list of address group objects """
         return self.list_of_addrGrp
+
+    def get_list_of_services( self ):
+        """ return a list of services objects """
+        return self.list_of_services

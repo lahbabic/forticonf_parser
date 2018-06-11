@@ -61,8 +61,9 @@ def main():
         ''' extract services (service custom and service group)'''
     elif options.csv_services is not None:
         file_parser.parse("services")
+        [print(service) for service in file_parser.get_list_of_services()]
     else:
-        missing_arguments("Please specify what type of objects you want to extract (-H or -s).")
+        missing_arguments("Please specify what type of objects you want to extract.")
 
 
 

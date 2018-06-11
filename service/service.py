@@ -77,3 +77,10 @@ class Service_group:
 
     def get_services( self ):
         return self.services
+
+    def __str__( self ):
+        ret = "name: " + self.name + "\n"
+        ret += "services: "
+        for service in self.services:
+            ret += service + " "
+        return ret

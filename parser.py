@@ -105,7 +105,6 @@ class File_parser():
                 pass
 
             if command == 'edit':
-
                 name = args[0].strip('"')
             elif command == 'set':
                 if args[0] == "member":
@@ -320,6 +319,10 @@ class File_parser():
         """ return a list of address group objects """
         return self.list_of_addrGrp
 
-    def get_list_of_services( self ):
-        """ return a list of services objects """
+    def get_list_of_Cservices( self ):
+        """ return a list of service custom objects """
         return self.list_of_services
+
+    def get_list_of_Gservices( self ):
+        """ return a list of service Group objects """
+        return self.list_of_srvGrp

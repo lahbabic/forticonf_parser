@@ -70,5 +70,13 @@ class Service:
         return self.name
 
 
-class ServiceGrp:
-    pass
+class Service_group:
+    def __init__( self, name="" ):
+        self.name = ""
+        self.services = []
+
+    def add_service(self, member="" ):
+        self.services.append( member )
+
+    def get_services( self ):
+        return self.services

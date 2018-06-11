@@ -82,10 +82,12 @@ class File_parser():
         self.list_of_netAddresses = []
         # list containing Address_group objects
         self.list_of_addrGrp = []
-        # list containing the members of an group
+        # list containing the members of a group
         self.list_of_members = []
-        # list containing service objects
+        # list containing service custom objects
         self.list_of_services = []
+        # list containing service group objects
+        self.list_of_srvGrp = []
 
 
     def create_addrgrpObj( self, lines=[] ):
@@ -221,6 +223,7 @@ class File_parser():
             elif command == 'next':
                 if net_addr.get('type'):
                     addr = Network_addr( net_addr )
+                    self.list_of_netAddresses.append(addr)
 
             if command not in implemented_commands:
                 if command not in unimplemented_commands:
@@ -229,8 +232,37 @@ class File_parser():
                     unimplemented_commands.append( command )
         print_done()
 
-    #0.20s
-    @profile
+    def create_serviceGObj( self, lines=[] ):
+        """ create 'service group' objects """
+        if not lines:
+            return None
+
+        command, name = "", ""
+        args, serv_list = [], []
+
+        for line in lines:
+            try:
+                command, *args = line.split()
+            except:
+                pass
+
+            if command == 'edit':
+                name = args[0].strip('"')
+            elif command == 'set':
+                if args[0] == "member":
+                    # pop 'member' keyword
+                    args.pop(0)
+                    [ serv_list.append( member ) for member in args ]
+            elif command == "next":
+                srv_grp = Service_group( name )
+                [ srv_grp.add_service(service.strip('"')) for service in serv_list ]
+                self.list_of_srvGrp.append( srv_grp )
+                # reinit variables
+                command, name = "", ""
+                args, serv_list = [], []
+        print_done()
+
+
     def parse( self ):
         print("File parsing for the"+B+" address"+W+" objects ...  ", end="" )
         addrs_lines = self.file_reader.get_objects( 'address' )
@@ -244,12 +276,17 @@ class File_parser():
         print("Creating addrgrp objects ...  ", end="" )
         self.create_addrgrpObj( addrgrp_lines )
 
-        print("File parsing for the"+B+" service custom"+W+" ...  ", end="" )
+        print("File parsing for the"+B+" service custom"+W+" objects ...  ", end="" )
         serviceC_lines = self.file_reader.get_objects( 'service custom' )
 
-        print("Creating service objects ...  ", end="" )
+        print("Creating service custom objects ...  ", end="" )
         self.create_serviceCObj( serviceC_lines )
 
+        print("File parsing for the"+B+" service group"+W+" objects ...  ", end="" )
+        serviceGrp_lines = self.file_reader.get_objects( 'service group' )
+
+        print("Creating service group objects ...  ", end="" )
+        self.create_serviceGObj( serviceC_lines )
 
     def get_netAddr_byName( self, name="" ):
         """ return netAddr object that has the name given in argument"""

@@ -128,7 +128,7 @@ class Network_addr:
         return self.name
 
     def get_addr(self):
-        return self.ip.get_x(), self.ip.get_y()
+        return self.ip[0], self.ip[1]
 
     def get_comment(self):
         return self.comment
@@ -152,13 +152,14 @@ class Network_addr:
 
 class Address_group:
     """ contain firewall addresses which are the members of this group """
-    def __init__(self, group_name=""):
+    def __init__( self, group_name="" ):
         self.group_name = group_name
+        # members is a list of str objects
         self.members = []
         self.comment = ""
 
-    def add_member(self, member=None):
-        self.members.append(member)
+    def add_member( self, member=None ):
+        self.members.append( member )
 
     def set_comment( self, comment="" ):
         self.comment = comment

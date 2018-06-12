@@ -2,6 +2,7 @@
 
 from network.FWaddress import *
 from service.service import *
+from policy.policy import *
 
 W = '\033[0m'   # white
 R = '\033[31m'  # red
@@ -88,6 +89,8 @@ class File_parser():
         self.list_of_services = []
         # list containing service group objects
         self.list_of_srvGrp = []
+        # list containing policy objects
+        self.list_of_policies = []
 
 
     def create_addrgrpObj( self, lines=[] ):
@@ -206,15 +209,12 @@ class File_parser():
                 service['service_name'] = args[0].strip('"')
             elif command == 'set':
                 try:
-                    """
-                        This two fields can contain multiple entries
-                        store them into a list
-                    """
+                    # This 3 fields can contain multiple entries
                     if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange' or\
                     args[0] == 'sctp-portrange':
                         portrange_type = args[0]
                         args.pop(0)
-                        service[ portrange_type ] = args
+                        service[ portrange_type ] = ' '.join(args)
                     elif args[0] in implemented_fields:
                         service[ args[0] ] = args[1]
                     elif args[0] not in implemented_fields:
@@ -237,6 +237,7 @@ class File_parser():
                     print(B+command+W+" command not implemented yet")
                     unimplemented_commands.append( command )
         print_done()
+
 
     def create_serviceGObj( self, lines=[] ):
         """ create 'service group' objects """
@@ -268,6 +269,7 @@ class File_parser():
                 args, serv_list = [], []
         print_done()
 
+
     def create_policyObj( self, lines=[] ):
         """ create 'policy' objects """
         if not lines:
@@ -275,7 +277,10 @@ class File_parser():
 
         implemented_commands = ['config', 'edit', 'set', 'next']
         unimplemented_commands = []
-
+        implemented_fields = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
+                    'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
+                    'global-label', 'nat', 'status', 'comments']
+        unimplemented_fields = []
         policy = {}
         command = ""
         args = []
@@ -289,7 +294,26 @@ class File_parser():
             if command == 'edit':
                 policy['policy_number'] = args[0].strip('"')
             elif command == 'set':
-                pass
+                # the field must be in implemented_fields
+                field = args.pop(0)
+                if field in implemented_fields:
+                    # if the field value is a list
+                    if isinstance(args, list):
+                        policy[ field ] = '  '.join( args ).replace('"', '')
+                        policy[ field ]
+                    else:
+                        policy[ field ] = args.strip('"')
+                elif field not in implemented_fields:
+                    if field not in unimplemented_fields:
+                        print_warning()
+                        print("Can't set the field "+B+field+W+", not implemented yet")
+                        unimplemented_fields.append( field )
+            elif command == 'next':
+                policy_obj = Policy( policy )
+                self.list_of_policies.append( policy_obj )
+                policy.clear()
+        print_done()
+
 
     def parse( self, object_to_look_for="" ):
         """
@@ -373,3 +397,7 @@ class File_parser():
     def get_list_of_Gservices( self ):
         """ return a list of service Group objects """
         return self.list_of_srvGrp
+
+    def get_list_of_policies( self ):
+        """ return a list of policy objects """
+        return self.list_of_policies

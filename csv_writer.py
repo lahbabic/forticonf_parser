@@ -24,6 +24,10 @@ class Csv_writer:
             fieldnames = ['Service Group','service_name', 'tcp_portrange', 'udp_portrange',\
             'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
                        'visibility', 'icmptype', 'icmpcode']
+        elif objects_type == "policy":
+            fieldnames = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
+                        'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
+                        'global_label', 'nat', 'status', 'comments']
 
         with open(csv_file, 'w', newline='') as csvfile:
             writer = csv.DictWriter( csvfile, fieldnames=fieldnames )
@@ -95,4 +99,16 @@ class Csv_writer:
                     rows.append( self.convert_service_row(root_serviceG, service) )
                 else:
                     rows.append( self.convert_service_row(serviceg.get_name(), service) )
+        return rows
+
+
+    def policies_to_rows( self ):
+        """
+            convert all gathered policies into csv format
+        """
+        rows = []
+        policies = self.parser.get_list_of_policies()
+        for policy in policies:
+            if policy != None:
+                rows.append( policy.get_attrs() )
         return rows

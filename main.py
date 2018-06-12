@@ -69,6 +69,9 @@ def main():
         print_done()
     elif options.csv_policies is not None:
         file_parser.parse("policies")
+        rows = csv_writer.policies_to_rows()
+        print("Writing policy objects into csv file : "+ options.csv_policies +"  ...  ", end="")
+        csv_writer.write_to_csv( options.csv_policies, "policy", rows )
         print_done()
     else:
         missing_arguments("Please specify what type of objects you want to extract.")

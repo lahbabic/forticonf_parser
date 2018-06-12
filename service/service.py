@@ -74,6 +74,8 @@ class Service:
         tmp = {}
         for key in self.implemented_keys:
             tmp[ key ] = getattr(self, key)
+            if not tmp[ key ]:
+                tmp[ key ] = "" 
         return tmp
 
 class Service_group:

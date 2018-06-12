@@ -26,8 +26,6 @@ def missing_arguments( msg="" ):
     print("\t"+sys.argv[0]+ " -h")
     exit("\n")
 
-
-
 def main():
 
     option_parser = OptionParser()
@@ -61,12 +59,11 @@ def main():
         ''' extract services (service custom and service group)'''
     elif options.csv_services is not None:
         file_parser.parse("services")
-        [print(service) for service in file_parser.get_list_of_Cservices()]
+        serviceGs = file_parser.get_list_of_Gservices()
         #[print(Sgrp) for Sgrp in file_parser.get_list_of_Gservices()]
+        rows = csv_writer.services_to_rows( "", serviceGs )
     else:
         missing_arguments("Please specify what type of objects you want to extract.")
-
-
 
 
 if __name__ == '__main__':

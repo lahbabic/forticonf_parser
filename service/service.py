@@ -69,7 +69,7 @@ class Service:
 
 class Service_group:
     def __init__( self, name="" ):
-        self.name = ""
+        self.name = name
         self.services = []
 
     def add_service(self, member="" ):
@@ -78,9 +78,13 @@ class Service_group:
     def get_services( self ):
         return self.services
 
+    def get_name( self ):
+        return self.name
+
     def __str__( self ):
         ret = "name: " + self.name + "\n"
         ret += "services: "
         for service in self.services:
             ret += service + " "
+        ret += "\n"
         return ret

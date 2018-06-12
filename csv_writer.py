@@ -7,7 +7,6 @@ class Csv_writer:
 
     def __init__( self, parser=None ):
         self.parser = parser
-        self.store = []
 
     def write_to_csv( self, csv_file="", objects_type="", rows=[] ):
         """ write to csv file """
@@ -38,7 +37,8 @@ class Csv_writer:
             row['Hostname'] = netAddr.get_name()
             row['ip/ip_start'], row['netmask/ip_end'] = netAddr.get_addr()
             row['Description'] = netAddr.get_comment()
-        return row
+            return row
+        return None
 
 
     def addresses_to_rows( self, root_grp="", groups="" ):
@@ -47,7 +47,6 @@ class Csv_writer:
         """
         rows = []
         for group in groups:
-            self.store.append( group )
             members = group.get_members()
             for member in members:
                 if member.split("-")[0] == 'g':
@@ -59,3 +58,15 @@ class Csv_writer:
                     rows.append( self.convert_addr_row(group.get_name(), member) )
 
         return rows
+
+    def services_to_rows( self, root_service="", serviceGs="" ):
+        """
+            convert all gathered services into csv format
+        """
+        rows = []
+        for serviceg in serviceGs:
+            print( serviceg )
+            services = serviceg.get_services()
+            for service in services:
+                pass
+        return None

@@ -294,7 +294,7 @@ class File_parser():
             serviceGrp_lines = self.file_reader.get_objects( 'service group' )
 
             print("Creating service group objects ...  ", end="" )
-            self.create_serviceGObj( serviceC_lines )
+            self.create_serviceGObj( serviceGrp_lines )
 
 
     def get_netAddr_byName( self, name="" ):

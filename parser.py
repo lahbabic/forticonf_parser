@@ -52,14 +52,16 @@ class File_reader():
         # set to True if 'object' is found
         object_found = False
         lines, service = [], []
+        action = ""
 
         if 'service' in object:
             service = object.split()
 
         for line in self.get_line_from_file():
-            if line:
+            try:
                 action, *args = line.split()
-
+            except:
+                pass
             if action == 'end':
                 object_found = False
             elif action == 'config' and args[0] == 'firewall':
@@ -197,7 +199,7 @@ class File_parser():
         unimplemented_fields = []
         unimplemented_commands = []
         implemented_fields = ['service_name', 'explicit-proxy', 'protocol', 'protocol-number',
-                   'visibility', 'icmptype', 'icmpcode']
+                   'visibility', 'icmptype', 'icmpcode', 'category', 'comment']
 
         for line in lines:
             try:
@@ -279,7 +281,7 @@ class File_parser():
         unimplemented_commands = []
         implemented_fields = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
                     'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
-                    'global-label', 'nat', 'status', 'comments']
+                    'global-label', 'nat', 'status', 'comments', 'ippool', 'poolname']
         unimplemented_fields = []
         policy = {}
         command = ""

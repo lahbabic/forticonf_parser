@@ -60,21 +60,19 @@ def main():
         csv_writer.write_to_csv( options.csv_hosts, "address", rows )
         print_done()
         ''' extract services (service custom and service group)'''
-    elif options.csv_services is not None:
+    if options.csv_services is not None:
         file_parser.parse("services")
         serviceGs = file_parser.get_list_of_Gservices()
         rows = csv_writer.services_to_rows( "", serviceGs )
         print("Writing services objects into csv file : "+ options.csv_services +"  ...  ", end="")
         csv_writer.write_to_csv( options.csv_services, "service", rows )
         print_done()
-    elif options.csv_policies is not None:
+    if options.csv_policies is not None:
         file_parser.parse("policies")
         rows = csv_writer.policies_to_rows()
         print("Writing policy objects into csv file : "+ options.csv_policies +"  ...  ", end="")
         csv_writer.write_to_csv( options.csv_policies, "policy", rows )
         print_done()
-    else:
-        missing_arguments("Please specify what type of objects you want to extract.")
 
 
 if __name__ == '__main__':

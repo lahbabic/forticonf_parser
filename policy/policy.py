@@ -10,7 +10,7 @@ class Policy:
 
     implemented_fields = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
                 'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
-                'global_label', 'nat', 'status', 'comments']
+                'global_label', 'nat', 'status', 'comments', 'ippool', 'poolname']
 
     def __init__(self, tmp_dict={}):
         self.policy_number = ""
@@ -26,6 +26,8 @@ class Policy:
         self.nat = ""
         self.status = ""
         self.comments = ""
+        self.ippool = ""
+        self.poolname = ""
 
         keys = tmp_dict.keys()
         for key in keys:

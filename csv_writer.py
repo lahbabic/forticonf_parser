@@ -23,17 +23,19 @@ class Csv_writer:
         elif objects_type == "service":
             fieldnames = ['Service Group','service_name', 'tcp_portrange', 'udp_portrange',\
             'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
-                       'visibility', 'icmptype', 'icmpcode']
+                       'visibility', 'icmptype', 'icmpcode', 'category', 'comment']
         elif objects_type == "policy":
             fieldnames = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
                         'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
-                        'global_label', 'nat', 'status', 'comments']
+                        'global_label', 'nat', 'status', 'comments', 'ippool', 'poolname']
 
+    #    try:
         with open(csv_file, 'w', newline='') as csvfile:
             writer = csv.DictWriter( csvfile, fieldnames=fieldnames )
             writer.writeheader()
             writer.writerows( rows )
-
+    #    except:
+    #        print_err()
 
     def convert_addr_row( self , group="", member="" ):
         """
@@ -65,9 +67,13 @@ class Csv_writer:
                     # Groups members of a group
                     rows += self.addresses_to_rows( group.get_name(), [self.parser.get_addrgrp_byName(member)] )
                 elif root_grp:
-                    rows.append( self.convert_addr_row(root_grp, member) )
+                    tmp = self.convert_addr_row(root_grp, member)
+                    if tmp:
+                        rows.append( tmp )
                 else:
-                    rows.append( self.convert_addr_row(group.get_name(), member) )
+                    tmp = self.convert_addr_row(group.get_name(), member)
+                    if tmp:
+                        rows.append( tmp )
         return rows
 
     def convert_service_row( self, serviceGrp="", service_name="" ):
@@ -92,13 +98,18 @@ class Csv_writer:
         for serviceg in serviceGs:
             services = serviceg.get_services()
             for service in services:
-                if service.split("-")[0] == 'sg':
-                    rows += self.services_to_rows( serviceg.get_name() ,\
-                    [self.parser.get_serviceGrp_byName(service)] )
-                elif root_serviceG:
-                    rows.append( self.convert_service_row(root_serviceG, service) )
-                else:
-                    rows.append( self.convert_service_row(serviceg.get_name(), service) )
+                if service:
+                    if service.split("-")[0] == 'sg':
+                        rows += self.services_to_rows( serviceg.get_name() ,\
+                        [self.parser.get_serviceGrp_byName(service)] )
+                    elif root_serviceG:
+                        tmp = self.convert_service_row(root_serviceG, service)
+                        if tmp:
+                            rows.append( tmp )
+                    else:
+                        tmp = self.convert_service_row(serviceg.get_name(), service)
+                        if tmp:
+                            rows.append( tmp )
         return rows
 
 

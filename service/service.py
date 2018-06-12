@@ -6,7 +6,7 @@ class Service:
 
     implemented_keys = ['service_name', 'explicit_proxy', 'protocol', 'protocol_number',\
                'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange',\
-               'sctp_portrange']
+               'sctp_portrange', 'category', 'comment']
 
     def __init__( self, dict={} ):
         self.service_name = ""
@@ -38,6 +38,8 @@ class Service:
         self.sctp_portrange = []
         ''' visibility to include this service in firewall policy service selection '''
         self.visibility = ""
+        self.category = ""
+        self.comment = ""
         # get all keys in dict, wich mean that this keys have defined values
         keys = dict.keys()
         for key in keys:
@@ -75,7 +77,7 @@ class Service:
         for key in self.implemented_keys:
             tmp[ key ] = getattr(self, key)
             if not tmp[ key ]:
-                tmp[ key ] = "" 
+                tmp[ key ] = ""
         return tmp
 
 class Service_group:

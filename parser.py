@@ -125,61 +125,6 @@ class File_parser():
                 args, addrgrp_list = [], []
         print_done()
 
-    def create_serviceCObj( self, lines=[] ):
-        """ create 'firewall service custom' objects """
-        if not lines:
-            return None
-
-        command = ""
-        args, service_list = [], []
-        service = {}
-        implemented_commands = ['config', 'edit', 'set', 'next']
-        unimplemented_fields = []
-        unimplemented_commands = []
-        implemented_fields = ['name', 'explicit-proxy', 'protocol', 'protocol-number',
-                   'visibility', 'icmptype', 'icmpcode']
-
-        for line in lines:
-            try:
-                command, *args = line.split()
-            except:
-                pass
-
-            if command == 'edit':
-                service['name'] = args[0].strip('"')
-            elif command == 'set':
-                try:
-                    """
-                        This two fields can contain multiple entries
-                        store them into a list
-                    """
-                    if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange' or\
-                    args[0] == 'sctp-portrange':
-                        portrange_type = args[0]
-                        args.pop(0)
-                        service[ portrange_type ] = args
-                    elif args[0] in implemented_fields:
-                        service[ args[0] ] = args[1]
-                    elif args[0] not in implemented_fields:
-                        if args[0] not in unimplemented_fields:
-                            print_warning()
-                            print("Can't set the field "+B+args[0]+W+", not implemented yet")
-                            unimplemented_fields.append( args[0] )
-                except:
-                    pass
-            elif command == 'unset':
-                pass
-            elif command == 'next':
-                service_Obj = Service( service )
-                self.list_of_services.append( service_Obj )
-                portrange_type = ""
-                service.clear()
-            if command not in implemented_commands:
-                if command not in unimplemented_commands:
-                    print_warning()
-                    print(B+command+W+" command not implemented yet")
-                    unimplemented_commands.append( command )
-        print_done()
 
     def create_addrObj( self, lines=[] ):
         """
@@ -237,6 +182,62 @@ class File_parser():
 
         print_done()
 
+    def create_serviceCObj( self, lines=[] ):
+        """ create 'firewall service custom' objects """
+        if not lines:
+            return None
+
+        command = ""
+        args, service_list = [], []
+        service = {}
+        implemented_commands = ['config', 'edit', 'set', 'next']
+        unimplemented_fields = []
+        unimplemented_commands = []
+        implemented_fields = ['service_name', 'explicit-proxy', 'protocol', 'protocol-number',
+                   'visibility', 'icmptype', 'icmpcode']
+
+        for line in lines:
+            try:
+                command, *args = line.split()
+            except:
+                pass
+
+            if command == 'edit':
+                service['service_name'] = args[0].strip('"')
+            elif command == 'set':
+                try:
+                    """
+                        This two fields can contain multiple entries
+                        store them into a list
+                    """
+                    if args[0] == 'tcp-portrange' or args[0] == 'udp-portrange' or\
+                    args[0] == 'sctp-portrange':
+                        portrange_type = args[0]
+                        args.pop(0)
+                        service[ portrange_type ] = args
+                    elif args[0] in implemented_fields:
+                        service[ args[0] ] = args[1]
+                    elif args[0] not in implemented_fields:
+                        if args[0] not in unimplemented_fields:
+                            print_warning()
+                            print("Can't set the field "+B+args[0]+W+", not implemented yet")
+                            unimplemented_fields.append( args[0] )
+                except:
+                    pass
+            elif command == 'unset':
+                pass
+            elif command == 'next':
+                service_Obj = Service( service )
+                self.list_of_services.append( service_Obj )
+                portrange_type = ""
+                service.clear()
+            if command not in implemented_commands:
+                if command not in unimplemented_commands:
+                    print_warning()
+                    print(B+command+W+" command not implemented yet")
+                    unimplemented_commands.append( command )
+        print_done()
+
     def create_serviceGObj( self, lines=[] ):
         """ create 'service group' objects """
         if not lines:
@@ -267,10 +268,35 @@ class File_parser():
                 args, serv_list = [], []
         print_done()
 
+    def create_policyObj( self, lines=[] ):
+        """ create 'policy' objects """
+        if not lines:
+            return None
 
-    def parse( self, object_to_search="" ):
+        implemented_commands = ['config', 'edit', 'set', 'next']
+        unimplemented_commands = []
 
-        if object_to_search == "hosts":
+        policy = {}
+        command = ""
+        args = []
+
+        for line in lines:
+            try:
+                command, *args = line.split()
+            except:
+                pass
+
+            if command == 'edit':
+                policy['policy_number'] = args[0].strip('"')
+            elif command == 'set':
+                pass
+
+    def parse( self, object_to_look_for="" ):
+        """
+            get lines from file that match the object specified
+            in argument to search for, and create the corresponding objects
+        """
+        if object_to_look_for == "hosts":
             print("File parsing for"+B+" address"+W+" objects ...  ", end="" )
             addrs_lines = self.file_reader.get_objects( 'address' )
 
@@ -283,7 +309,7 @@ class File_parser():
             print("Creating addrgrp objects ...  ", end="" )
             self.create_addrgrpObj( addrgrp_lines )
 
-        elif object_to_search == "services":
+        elif object_to_look_for == "services":
             print("File parsing for"+B+" service custom"+W+" objects ...  ", end="" )
             serviceC_lines = self.file_reader.get_objects( 'service custom' )
 
@@ -295,6 +321,13 @@ class File_parser():
 
             print("Creating service group objects ...  ", end="" )
             self.create_serviceGObj( serviceGrp_lines )
+
+        elif object_to_look_for == "policies":
+            print("File parsing for"+B+" policy"+W+" objects ...  ", end="" )
+            policies_lines = self.file_reader.get_objects( 'policy' )
+
+            print("Creating policy objects ...  ", end="" )
+            self.create_policyObj( policies_lines )
 
 
     def get_netAddr_byName( self, name="" ):

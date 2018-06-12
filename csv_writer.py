@@ -20,8 +20,10 @@ class Csv_writer:
 
         if objects_type == "address":
             fieldnames = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'Description']
-        if objects_type == "service":
-            pass
+        elif objects_type == "service":
+            fieldnames = ['Service Group','service_name', 'tcp_portrange', 'udp_portrange',\
+            'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
+                       'visibility', 'icmptype', 'icmpcode']
 
         with open(csv_file, 'w', newline='') as csvfile:
             writer = csv.DictWriter( csvfile, fieldnames=fieldnames )
@@ -71,28 +73,26 @@ class Csv_writer:
         row = {}
         service = None
         service = self.parser.get_service_byName( service_name )
-        print(service)
         if service != None:
-            row['Service Group'] = serviceGrp
-            row['service'] = service.get_name()
+            # Create new dictonary with all attributes + Service Group name that
+            # the Service belong to
+            row = dict({'Service Group': serviceGrp} , **(service.get_attrs()))
             return row
         return None
 
-    def services_to_rows( self, root_service="", serviceGs="" ):
+    def services_to_rows( self, root_serviceG="", serviceGs="" ):
         """
             convert all gathered services into csv format
         """
         rows = []
         for serviceg in serviceGs:
-            #print( serviceg )
             services = serviceg.get_services()
             for service in services:
                 if service.split("-")[0] == 'sg':
-                    pass
-                elif root_service:
-                    pass
+                    rows += self.services_to_rows( serviceg.get_name() ,\
+                    [self.parser.get_serviceGrp_byName(service)] )
+                elif root_serviceG:
+                    rows.append( self.convert_service_row(root_serviceG, service) )
                 else:
                     rows.append( self.convert_service_row(serviceg.get_name(), service) )
-
-        #print(rows)
         return rows

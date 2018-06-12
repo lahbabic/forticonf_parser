@@ -37,6 +37,9 @@ def main():
     option_parser.add_option("-s", "--services", dest="csv_services",
                       help="csv output FILE for services [default FILE_services.csv]",
                       metavar="FILE")
+    option_parser.add_option("-p", "--policies", dest="csv_policies",
+                      help="csv output FILE for policies [default FILE_policies.csv]",
+                      metavar="FILE")
 
     (options, args) = option_parser.parse_args()
 
@@ -60,8 +63,13 @@ def main():
     elif options.csv_services is not None:
         file_parser.parse("services")
         serviceGs = file_parser.get_list_of_Gservices()
-        #[print(Sgrp) for Sgrp in file_parser.get_list_of_Gservices()]
         rows = csv_writer.services_to_rows( "", serviceGs )
+        print("Writing services objects into csv file : "+ options.csv_services +"  ...  ", end="")
+        csv_writer.write_to_csv( options.csv_services, "service", rows )
+        print_done()
+    elif options.csv_policies is not None:
+        file_parser.parse("policies")
+        print_done()
     else:
         missing_arguments("Please specify what type of objects you want to extract.")
 

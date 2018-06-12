@@ -4,11 +4,12 @@
 class Service:
     """ contain a list of used protocols and ports """
 
-    implemented_keys = ['name', 'explicit_proxy', 'protocol', 'protocol_number',\
-               'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange'\
+    implemented_keys = ['service_name', 'explicit_proxy', 'protocol', 'protocol_number',\
+               'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange',\
                'sctp_portrange']
 
     def __init__( self, dict={} ):
+        self.service_name = ""
         ''' configure this service as an explicit web proxy service,
             The service will be available to explicit proxy firewall
             policies but not to regular firewall policies. '''
@@ -64,12 +65,16 @@ class Service:
         return ret
 
     def get_name( self ):
-        return self.name
+        return self.service_name
 
     def get_attrs( self ):
         """
             return all attribute in a dictionary
         """
+        tmp = {}
+        for key in self.implemented_keys:
+            tmp[ key ] = getattr(self, key)
+        return tmp
 
 class Service_group:
     """ Group containing a list of services """

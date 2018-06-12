@@ -6,12 +6,12 @@
     if it’s processed and even whether or not it’s allowed to pass through the FortiGate."""
 
 
-class policy:
+class Policy:
 
     def __init__(self, policy_number):
         self.policy_number = policy_number
-        self.srcintf = ""
-        self.dstintf = ""
+        self.srcintf = []
+        self.dstintf = []
         self.srcaddr = ""
         self.dstaddr = ""
         self.action = ""

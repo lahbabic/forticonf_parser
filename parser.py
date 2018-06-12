@@ -311,6 +311,20 @@ class File_parser():
                 return addrgrp
         return None
 
+    def get_service_byName( self, name="" ):
+        """ return service custom object that has the name given in argument"""
+        for service in self.list_of_services:
+            if service.get_name() == name:
+                return service
+        return None
+
+    def get_serviceGrp_byName( self, name="" ):
+        """ return service group object that has the name given in argument"""
+        for serviceG in self.list_of_srvGrp:
+            if serviceG.get_name() == name:
+                return serviceG
+        return None
+
     def get_list_of_netAdresses( self ):
         """ return a list of network address objects """
         return self.list_of_netAddresses

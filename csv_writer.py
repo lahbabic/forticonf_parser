@@ -3,6 +3,12 @@
 import csv
 from parser import *
 
+"""
+    need to update the convertion form addresses to rows:
+    check for address if it belong to a group not the opposite
+    because if the address do not belong to a group it will not appeare in
+    the csv file
+"""
 class Csv_writer:
 
     def __init__( self, parser=None ):
@@ -56,8 +62,21 @@ class Csv_writer:
                     rows.append( self.convert_addr_row(root_grp, member) )
                 else:
                     rows.append( self.convert_addr_row(group.get_name(), member) )
-
         return rows
+
+    def convert_service_row( self, serviceGrp="", service_name="" ):
+        """
+            convert service to a row
+        """
+        row = {}
+        service = None
+        service = self.parser.get_service_byName( service_name )
+        print(service)
+        if service != None:
+            row['Service Group'] = serviceGrp
+            row['service'] = service.get_name()
+            return row
+        return None
 
     def services_to_rows( self, root_service="", serviceGs="" ):
         """
@@ -65,8 +84,15 @@ class Csv_writer:
         """
         rows = []
         for serviceg in serviceGs:
-            print( serviceg )
+            #print( serviceg )
             services = serviceg.get_services()
             for service in services:
-                pass
-        return None
+                if service.split("-")[0] == 'sg':
+                    pass
+                elif root_service:
+                    pass
+                else:
+                    rows.append( self.convert_service_row(serviceg.get_name(), service) )
+
+        #print(rows)
+        return rows

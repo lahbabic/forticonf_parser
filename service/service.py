@@ -5,7 +5,8 @@ class Service:
     """ contain a list of used protocols and ports """
 
     implemented_keys = ['name', 'explicit_proxy', 'protocol', 'protocol_number',\
-               'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange']
+               'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange'\
+               'sctp_portrange']
 
     def __init__( self, dict={} ):
         ''' configure this service as an explicit web proxy service,
@@ -36,7 +37,6 @@ class Service:
         self.sctp_portrange = []
         ''' visibility to include this service in firewall policy service selection '''
         self.visibility = ""
-        self.comment = ""
         # get all keys in dict, wich mean that this keys have defined values
         keys = dict.keys()
         for key in keys:
@@ -66,8 +66,14 @@ class Service:
     def get_name( self ):
         return self.name
 
+    def get_attrs( self ):
+        """
+            return all attribute in a dictionary
+        """
 
 class Service_group:
+    """ Group containing a list of services """
+
     def __init__( self, name="" ):
         self.name = name
         self.services = []

@@ -79,7 +79,7 @@ class File_reader():
 class File_parser():
     """ parse a configuration file and create needed objects """
 
-    def __init__(self, file_name=""):
+    def __init__( self, file_name="" ):
         self.file_reader = File_reader( file_name )
         # list containing Network_addr objects
         self.list_of_netAddresses = []
@@ -302,7 +302,6 @@ class File_parser():
                     # if the field value is a list
                     if isinstance(args, list):
                         policy[ field ] = '  '.join( args ).replace('"', '')
-                        policy[ field ]
                     else:
                         policy[ field ] = args.strip('"')
                 elif field not in implemented_fields:

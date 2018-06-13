@@ -11,8 +11,8 @@ except ImportError:
     print("pip3 install xlwt")
     exit(1)
 
-from parser import *
-from excel_writer import *
+from file.parser import *
+from file.excel_writer import *
 from optparse import OptionParser
 
 

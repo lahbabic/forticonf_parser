@@ -71,48 +71,6 @@ def main():
     book.save( options.excel_file )
     print_done()
 
-    '''
-        #extract addresses and groups objects
-    if options.csv_hosts is not None:
-        file_parser.parse("hosts")
-        """ for each address group, take their members and convert them into
-            csv format stored as rows """
-        groups = file_parser.get_list_of_addrGrp()
-        rows = excel_writer.addresses_to_rows( "", groups )
-
-        print("Writing hosts objects into excel file : "+ options.csv_hosts +"  ...  ", end="")
-        #excel_writer.write_to_csv( options.csv_hosts, "address", rows )
-
-        excel_writer.write_rows( rows, "address")
-        book.save("test.xls")
-        """
-        book = xlwt.Workbook()
-        hosts_sheet = book.add_sheet("Hosts")
-        cols = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'Description']
-        for num in range( len(rows) ):
-            row = hosts_sheet.row( num )
-            for index, col in enumerate( cols ):
-                value = 'test'
-                row.write( index, value )
-        book.save("test.xls")
-        """
-        print_done()
-        #extract services (service custom and service group)
-    if options.csv_services is not None:
-        file_parser.parse("services")
-        serviceGs = file_parser.get_list_of_Gservices()
-        rows = excel_writer.services_to_rows( "", serviceGs )
-        print("Writing services objects into csv file : "+ options.csv_services +"  ...  ", end="")
-        excel_writer.write_to_csv( options.csv_services, "service", rows )
-        print_done()
-    if options.csv_policies is not None:
-        file_parser.parse("policies")
-        rows = excel_writer.policies_to_rows()
-        print("Writing policy objects into csv file : "+ options.csv_policies +"  ...  ", end="")
-        excel_writer.write_to_csv( options.csv_policies, "policy", rows )
-        print_done()
-    '''
-
 
 if __name__ == '__main__':
     main()

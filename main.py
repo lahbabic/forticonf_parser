@@ -54,6 +54,8 @@ def main():
     else:
         missing_arguments("You should provide a configuration file as an argument using -f.")
 
+    if options.excel_file is None:
+        options.excel_file = options.config_file.split(".")[0]+".xls"
 
     file_parser.parse("hosts")
     groups = file_parser.get_list_of_addrGrp()

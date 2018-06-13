@@ -331,7 +331,6 @@ class File_parser():
 
             print("File parsing for"+B+" addrgrp"+W+" objects ...  ", end="" )
             addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
-
             print("Creating addrgrp objects ...  ", end="" )
             self.create_addrgrpObj( addrgrp_lines )
 

@@ -4,9 +4,9 @@
 class Service:
     """ contain a list of used protocols and ports """
 
-    implemented_keys = ['service_name', 'explicit_proxy', 'protocol', 'protocol_number',\
-               'visibility', 'icmptype', 'icmpcode', 'tcp_portrange', 'udp_portrange',\
-               'sctp_portrange', 'category', 'comment']
+    implemented_keys = ['service_name', 'tcp_portrange', 'udp_portrange',\
+    'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
+               'visibility', 'icmptype', 'icmpcode', 'category', 'comment']
 
     def __init__( self, dict={} ):
         self.service_name = ""
@@ -90,7 +90,7 @@ class Service_group:
     def add_service(self, member="" ):
         self.services.append( member )
 
-    def get_services( self ):
+    def get_members( self ):
         return self.services
 
     def get_name( self ):

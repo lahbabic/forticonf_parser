@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*
 
 import sys
-
+from optparse import OptionParser
 try:
     import xlwt
 except ImportError:
@@ -13,7 +13,7 @@ except ImportError:
 
 from file.parser import *
 from file.excel_writer import *
-from optparse import OptionParser
+
 
 
 

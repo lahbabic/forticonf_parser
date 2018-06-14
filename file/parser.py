@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*
 
-from network.FWaddress import *
+from host.FWaddress import *
 from service.service import *
 from policy.policy import *
 

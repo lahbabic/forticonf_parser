@@ -100,7 +100,6 @@ class Iprange(Network):
         Network.__init__(self, x, y)
 
 
-
 class Network_addr:
     """ is the name of the network/subnet/host, his type, ip and eventually a comment """
 

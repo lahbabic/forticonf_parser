@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*
 from ipaddress import ip_address
-
+from object import *
 """ firewall addresses used in firewall policies.
     An IPv4 firewall address is a set of one or more IP addresses,
     represented as a domain name, an IP address and a subnet mask,
@@ -100,28 +100,32 @@ class Iprange(Network):
         Network.__init__(self, x, y)
 
 
-class Network_addr:
+class Network_addr(Object):
     """ is the name of the network/subnet/host, his type, ip and eventually a comment """
 
     implemented_types = ['ipmask', 'iprange']
     unimplemented_types = ['fqdn', 'geography', 'wildcard', 'wildcard-fqdn']
     implemented_keys = ['name', 'type', 'ip', 'comment']
 
-    def __init__( self, dict={} ):
+    def __init__( self, tmp_dict={} ):
         self.name = ""
         self.type = ""
         ''' tuple containing ip/mask or iprange for now '''
         self.ip = None
         self.comment = ""
 
-        keys = dict.keys()
-        if not is_valid_ipmask(dict['ip'][0]) or not is_valid_ipmask(dict['ip'][1]):
+        keys = tmp_dict.keys()
+        if not is_valid_ipmask(tmp_dict['ip'][0]) or not is_valid_ipmask(tmp_dict['ip'][1]):
             print_warning()
-            print("Invalid ip/mask "+B+dict['ip'][0]+" "+dict['ip'][1]+W)
+            print("Invalid ip/mask "+B+tmp_dict['ip'][0]+" "+tmp_dict['ip'][1]+W)
 
+
+        super().__init__( tmp_dict )
+        """
         for key in keys:
             if key in self.implemented_keys:
                 setattr(self, key, dict[ key ])
+        """
 
     def get_name(self):
         return self.name
@@ -132,21 +136,6 @@ class Network_addr:
     def get_comment(self):
         return self.comment
 
-    def __str__( self ):
-        """ create a printable representation of this object """
-        ret = ""
-        for key in self.implemented_keys:
-            value = getattr(self, key)
-            # if value is not None and is a list
-            if value and not isinstance(value, tuple):
-                ret += str(key)+': '+str(value)+'\n'
-            # if value is not None and is a list
-            else:
-                ret += str(key)+': '
-                for x in value:
-                    ret += str(x)+' '
-                ret += '\n'
-        return ret
 
 
 class Address_group:

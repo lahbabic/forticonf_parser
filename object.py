@@ -41,3 +41,28 @@ class Object:
             if not tmp[ key ]:
                 tmp[ key ] = ""
         return tmp
+
+    def convert_to_row( self , group="" ):
+        """ return a list containing all attributes """
+        row = []
+        keys = self.implemented_keys
+        if group:
+            row.append( group )
+
+        if self.__class__.__name__ == "Network_addr":
+            keys = [ key for key in self.implemented_keys if key != "type" ]
+
+        for key in keys:
+            if hasattr( self, key ):
+                value = getattr( self, key )
+                # if value is not a list
+                if not isinstance(value, list):
+                    row.append( value )
+                # if value is a list
+                else:
+                    if self.__class__.__name__ == "Network_addr":
+                        for x in value:
+                            row.append( x )
+                    else:
+                        row.append( ' '.join( value ) )
+        return row

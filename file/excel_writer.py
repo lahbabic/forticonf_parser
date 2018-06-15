@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*
 
+
 class Excel_writer:
 
     hosts_fieldnames = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'Description']
@@ -27,42 +28,6 @@ class Excel_writer:
             row.write( index, value )
 
 
-    def convert_addr_row( self , group="", member="" ):
-        """
-            convert address object to writable format and write it
-        """
-        row = []
-        netAddr = None
-        netAddr = self.parser.get_netAddr_byName( member )
-        if netAddr != None:
-            row.append(group)
-            row.append( netAddr.get_name() )
-            x, y = netAddr.get_addr()
-            row.append(x)
-            row.append(y)
-            row.append( netAddr.get_comment() )
-            return row
-        return None
-
-    def convert_service_row( self, serviceGrp="", service_name="" ):
-        """
-            convert service to a row
-        """
-        row = []
-        service = None
-        service = self.parser.get_service_byName( service_name )
-        if service != None:
-            # Create new dictonary with all attributes + Service Group name that
-            # the Service belong to
-            tmp = dict({'Service Group': serviceGrp} , **(service.get_attrs()))
-            for field in self.services_fieldnames:
-                if tmp[ field ]:
-                    row.append( tmp[ field ] )
-                else:
-                    row.append("")
-            return row
-        return None
-
     def policies_to_file( self ):
         """
             convert all gathered policies into csv format
@@ -74,13 +39,7 @@ class Excel_writer:
         policies = self.parser.get_list_of_policies()
         for policy in policies:
             if policy != None:
-                row = []
-                tmp = policy.get_attrs()
-                for field in self.policies_fieldnames:
-                    if tmp[ field ]:
-                        row.append( tmp[ field ] )
-                    else:
-                        row.append("")
+                row = policy.convert_to_row()
                 self.write_row( policy_num , row, self.sheet )
                 policy_num += 1
 
@@ -109,26 +68,28 @@ class Excel_writer:
 
         for object in objects:
             members = object.get_members()
+
             for member in members:
                 tmp = ""
+                # if it's a group
+                """ need to update (check it's type if it's a group not his name)"""
                 if member.split("-")[0] == 'g' or member.split("-")[0] == 'sg':
                     # Groups members of a group
                     if type == "hosts":
                         self.objects_to_file( False, "hosts", object.get_name(),\
                             [self.parser.get_addrgrp_byName(member)] )
                     elif type == "services":
-                        self.objects_to_file( False, object.get_name() ,\
+                        self.objects_to_file( False, "services", object.get_name() ,\
                             [self.parser.get_serviceGrp_byName(member)] )
+                # if it's not a group and belong to a group
                 elif root:
-                    if type == "hosts":
-                        tmp = self.convert_addr_row( root, member )
-                    elif type == "services":
-                        tmp = self.convert_service_row( root, member)
+                    obj = self.parser.get_obj_byName( type, member )
+                    tmp = obj.convert_to_row( root )
+                #
                 else:
-                    if type == "hosts":
-                        tmp = self.convert_addr_row( object.get_name(), member )
-                    elif type == "services":
-                        tmp = self.convert_service_row( object.get_name(), member )
+                    obj = self.parser.get_obj_byName( type, member )
+                    tmp = obj.convert_to_row( object.get_name() )
+
                 if tmp:
                     self.write_row( self.row_num, tmp, self.sheet )
                     self.row_num += 1

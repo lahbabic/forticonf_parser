@@ -114,13 +114,7 @@ class Network_addr(Object):
             print_warning()
             print("Invalid ip/mask "+B+tmp_dict['ip'][0]+" "+tmp_dict['ip'][1]+W)
 
-
         super().__init__( tmp_dict )
-        """
-        for key in keys:
-            if key in self.implemented_keys:
-                setattr(self, key, dict[ key ])
-        """
 
     def get_name(self):
         return self.name

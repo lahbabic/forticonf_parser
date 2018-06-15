@@ -146,7 +146,7 @@ class File_parser():
             elif command == 'set':
                 if args[0] == 'subnet':
                     net_addr['type'] = 'ipmask'
-                    net_addr['ip'] = (args[1], args[2])
+                    x, y = args[1], args[2]
                 elif args[0] == 'type' and args[1] == 'ipmask':
                     net_addr['type'] = 'ipmask'
                 elif args[0] == 'type' and args[1] == 'iprange':
@@ -161,8 +161,9 @@ class File_parser():
                     net_addr['comment'] = ' '.join(args)
             elif command == 'next':
                 if net_addr.get('type'):
-                    if net_addr['type'] == 'iprange':
-                        net_addr['ip'] = (x, y)
+                    net_addr['ip'] = []
+                    net_addr['ip'].append(x)
+                    net_addr['ip'].append(y)
                     addr = Network_addr( net_addr )
                     self.list_of_netAddresses.append(addr)
                     x, y = "", ""
@@ -347,18 +348,13 @@ class File_parser():
             self.create_policyObj( policies_lines )
 
 
+
+            '''
     def get_netAddr_byName( self, name="" ):
         """ return netAddr object that has the name given in argument"""
         for net_addr in self.list_of_netAddresses:
             if net_addr.get_name() == name:
                 return net_addr
-        return None
-
-    def get_addrgrp_byName( self, name="" ):
-        """ return addrgrp object that has the name given in argument"""
-        for addrgrp in self.list_of_addrGrp:
-            if addrgrp.get_name() == name:
-                return addrgrp
         return None
 
     def get_service_byName( self, name="" ):
@@ -367,6 +363,14 @@ class File_parser():
             if service.get_name() == name:
                 return service
         return None
+        '''
+
+    def get_addrgrp_byName( self, name="" ):
+        """ return addrgrp object that has the name given in argument"""
+        for addrgrp in self.list_of_addrGrp:
+            if addrgrp.get_name() == name:
+                return addrgrp
+        return None
 
     def get_serviceGrp_byName( self, name="" ):
         """ return service group object that has the name given in argument"""
@@ -374,6 +378,20 @@ class File_parser():
             if serviceG.get_name() == name:
                 return serviceG
         return None
+
+    def get_obj_byName( self, type="", name=""):
+        """ return object that has the name and the type given in argument """
+        if type == "hosts":
+            for net_addr in self.list_of_netAddresses:
+                if net_addr.get_name() == name:
+                    return net_addr
+            return None
+        elif type == "services":
+            for service in self.list_of_services:
+                if service.get_name() == name:
+                    return service
+            return None
+
 
     def get_list_of_netAdresses( self ):
         """ return a list of network address objects """

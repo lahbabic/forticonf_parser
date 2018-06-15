@@ -6,7 +6,7 @@ from object import *
     These instructions control where the traffic goes, how it’s processed,
     if it’s processed and even whether or not it’s allowed to pass through the FortiGate."""
 
-
+""" inherite from the 'Object' class """
 class Policy(Object):
 
     implemented_keys = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\

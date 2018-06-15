@@ -5,7 +5,7 @@
 class Object:
 
     def __init__( self, dict={} ):
-
+        """ set all object attributes """
         keys = dict.keys()
         for key in keys:
             attr = key
@@ -15,7 +15,7 @@ class Object:
                 setattr( self, attr, dict[ key ] )
 
     def __str__( self ):
-        """ create a printable representation of this object"""
+        """ create a printable representation of this object """
         ret = ""
         for key in self.implemented_keys:
             if hasattr(self, key):

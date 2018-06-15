@@ -99,7 +99,7 @@ class Iprange(Network):
     def __init__(self, x, y):
         Network.__init__(self, x, y)
 
-
+""" inherite from the 'Object' class """
 class Network_addr(Object):
     """ is the name of the network/subnet/host, his type, ip and eventually a comment """
 

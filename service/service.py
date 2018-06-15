@@ -2,6 +2,7 @@
 
 from object import *
 
+""" inherite from the 'Object' class """
 class Service(Object):
     """ contain a list of used protocols and ports """
 

@@ -45,9 +45,6 @@ class Service(Object):
 
         super().__init__( tmp_dict )
 
-
-
-
     def get_name( self ):
         return self.service_name
 

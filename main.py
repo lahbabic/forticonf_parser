@@ -52,7 +52,6 @@ def main():
     excel_writer.objects_to_file( True, "services", "", serviceGs )
 
     file_parser.parse("policies")
-    serviceGs = file_parser.get_list_of_policies()
     excel_writer.policies_to_file( )
 
     print("Writing objects to file "+ options.excel_file + " ...  ",end="")

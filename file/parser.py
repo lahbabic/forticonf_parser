@@ -173,7 +173,6 @@ class File_parser():
                     print_warning()
                     print(B+command+W+" command not implemented yet")
                     unimplemented_commands.append( command )
-
         print_done()
 
     def create_serviceCObj( self, lines=[] ):
@@ -346,24 +345,7 @@ class File_parser():
 
             print("Creating policy objects ...  ", end="" )
             self.create_policyObj( policies_lines )
-
-
-
-            '''
-    def get_netAddr_byName( self, name="" ):
-        """ return netAddr object that has the name given in argument"""
-        for net_addr in self.list_of_netAddresses:
-            if net_addr.get_name() == name:
-                return net_addr
-        return None
-
-    def get_service_byName( self, name="" ):
-        """ return service custom object that has the name given in argument"""
-        for service in self.list_of_services:
-            if service.get_name() == name:
-                return service
-        return None
-        '''
+            
 
     def get_addrgrp_byName( self, name="" ):
         """ return addrgrp object that has the name given in argument"""

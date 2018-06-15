@@ -116,15 +116,9 @@ class Network_addr(Object):
 
         super().__init__( tmp_dict )
 
+
     def get_name(self):
         return self.name
-
-    def get_addr(self):
-        return self.ip[0], self.ip[1]
-
-    def get_comment(self):
-        return self.comment
-
 
 
 class Address_group:

@@ -51,7 +51,7 @@ class Excel_writer:
         # first_use is for if we enter this funciton for the first time
         # type is the type of the object
         # root is the parent group
-        # the object here can be a group of hosts or
+        # the objects here can be a group of hosts or
         # a group of services
         if first_use:
             # This variable is to count the number of written rows
@@ -85,7 +85,7 @@ class Excel_writer:
                 elif root:
                     obj = self.parser.get_obj_byName( type, member )
                     tmp = obj.convert_to_row( root )
-                #
+                # if it doesn't belong to a group
                 else:
                     obj = self.parser.get_obj_byName( type, member )
                     tmp = obj.convert_to_row( object.get_name() )

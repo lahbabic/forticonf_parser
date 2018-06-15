@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*
 
 from object import *
+from print_x import *
+
 """ policies are essentially discrete compartmentalized sets of instructions
     that control the traffic flow going through the firewall.
     These instructions control where the traffic goes, how it’s processed,
@@ -31,3 +33,12 @@ class Policy(Object):
         self.poolname = ""
 
         super().__init__( tmp_dict )
+
+    def get_id( self ):
+        try:
+            id = int(self.policy_number)
+            return id
+        except:
+            print_warning()
+            print("the policy id "+B+self.policy_number+W+\
+                " is not an integer, it can't be sorted")

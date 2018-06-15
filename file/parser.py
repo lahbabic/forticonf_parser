@@ -3,20 +3,8 @@
 from host.FWaddress import *
 from service.service import *
 from policy.policy import *
+from print_x import *
 
-W = '\033[0m'   # white
-R = '\033[31m'  # red
-G = '\033[32m'  # green
-O = '\033[93m'  # orange
-B = '\033[94m'  # blue
-
-
-def print_done():
-    print(W+"["+G+"done"+W+"]")
-def print_err():
-    print(W+"["+R+"error"+W+"]")
-def print_warning():
-    print(W+"["+O+"warning"+W+"]")
 
 class File_reader():
     """
@@ -271,6 +259,9 @@ class File_parser():
                 args, serv_list = [], []
         print_done()
 
+    def get_policy_id( self, policy ):
+        """ return the id of the policy, used for sorting """
+        return policy.get_id()
 
     def create_policyObj( self, lines=[] ):
         """ create 'policy' objects """
@@ -313,6 +304,8 @@ class File_parser():
                 policy_obj = Policy( policy )
                 self.list_of_policies.append( policy_obj )
                 policy.clear()
+        # sort policies by id
+        self.list_of_policies = sorted( self.list_of_policies, key=self.get_policy_id )
         print_done()
 
 

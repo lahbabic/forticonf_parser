@@ -1,20 +1,15 @@
 #-*- coding: utf-8 -*
 from ipaddress import ip_address
 from object import *
+from print_x import *
+
 """ firewall addresses used in firewall policies.
     An IPv4 firewall address is a set of one or more IP addresses,
     represented as a domain name, an IP address and a subnet mask,
     or an IP address range. An IPv6 firewall address is an IPv6 address prefix
     source: http://help.fortinet.com/cli/fos50hlp/54/Content/FortiOS/fortiOS-cli-ref-54/config/firewall/address.htm """
 
-W = '\033[0m'   # white
-R = '\033[31m'  # red
-G = '\033[32m'  # green
-O = '\033[93m'  # orange
-B = '\033[94m'  # blue
 
-def print_warning():
-    print(W+"["+O+"warning"+W+"]")
 
 def is_valid_ipmask(ipmask):
     """ check if ipv4/6 and mask are valid """

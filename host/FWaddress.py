@@ -108,6 +108,8 @@ class Network_addr(Object):
         ''' tuple containing ip/mask or iprange for now '''
         self.ip = None
         self.comment = ""
+        # groups that belong to
+        self.member_of_gs = ""
 
         keys = tmp_dict.keys()
         if not is_valid_ipmask(tmp_dict['ip'][0]) or not is_valid_ipmask(tmp_dict['ip'][1]):
@@ -115,7 +117,6 @@ class Network_addr(Object):
             print("Invalid ip/mask "+B+tmp_dict['ip'][0]+" "+tmp_dict['ip'][1]+W)
 
         super().__init__( tmp_dict )
-
 
     def get_name(self):
         return self.name

@@ -18,9 +18,13 @@ class File_reader():
     def get_line_from_file( self ):
         """ function that returns line by line during file reading """
         try:
+            # open the file
             file = open( str( self.file_name ), 'r', encoding='utf-8')
+            # for each line in the file
             for line in file:
+                # yield (return) the line
                 yield line
+            # when we finish form reading the file, close it
             file.close()
         except OSError:
             print_err()
@@ -33,6 +37,8 @@ class File_reader():
             return a list containing all objects after 'config firewall object'
             if object in [address, addrgrp, policy, service, servicegrp]
         """
+        # if the object sought is not in this list (list of processed object)
+        # then return none
         if object not in ['address', 'addrgrp', 'policy', 'service custom', 'service group']:
             print_warning()
             print("Can't parse the object "+B+object+W+" from the file, not implemented yet")
@@ -47,12 +53,14 @@ class File_reader():
 
         for line in self.get_line_from_file():
             try:
+                # get the action (config, set, unset ...) and it's arguments
                 action, *args = line.split()
             except:
                 pass
             if action == 'end':
                 object_found = False
             elif action == 'config' and args[0] == 'firewall':
+                # if the corresponding object is found
                 if len(service) == 2\
                         and service[0] and service[1] in args\
                         or object in args:
@@ -81,7 +89,8 @@ class File_parser():
         self.list_of_srvGrp = []
         # list containing policy objects
         self.list_of_policies = []
-
+        # list containing tuples of hosts and a list of groups they belong to
+        self.tuples_h_gs = []
 
     def create_addrgrpObj( self, lines=[] ):
         """ create 'firewall addrgrp' objects """
@@ -323,6 +332,7 @@ class File_parser():
 
             print("File parsing for"+B+" addrgrp"+W+" objects ...  ", end="" )
             addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
+            
             print("Creating addrgrp objects ...  ", end="" )
             self.create_addrgrpObj( addrgrp_lines )
 
@@ -345,17 +355,17 @@ class File_parser():
 
             print("Creating policy objects ...  ", end="" )
             self.create_policyObj( policies_lines )
-            
+
 
     def get_addrgrp_byName( self, name="" ):
-        """ return addrgrp object that has the name given in argument"""
+        """ return addrgrp object that has the name given in argument """
         for addrgrp in self.list_of_addrGrp:
             if addrgrp.get_name() == name:
                 return addrgrp
         return None
 
     def get_serviceGrp_byName( self, name="" ):
-        """ return service group object that has the name given in argument"""
+        """ return service group object that has the name given in argument """
         for serviceG in self.list_of_srvGrp:
             if serviceG.get_name() == name:
                 return serviceG
@@ -373,7 +383,6 @@ class File_parser():
                 if service.get_name() == name:
                     return service
             return None
-
 
     def get_list_of_netAdresses( self ):
         """ return a list of network address objects """
@@ -394,3 +403,8 @@ class File_parser():
     def get_list_of_policies( self ):
         """ return a list of policy objects """
         return self.list_of_policies
+
+    def groups_containing_host( self, host="" ):
+        """ returns all groups in which a specific host is located """
+        return ' '.join([ group.get_name() for group in self.list_of_addrGrp
+            if host in group.get_members() ])

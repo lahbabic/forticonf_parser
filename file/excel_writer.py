@@ -48,7 +48,7 @@ class Excel_writer:
         """
             convert all gathered addresses into csv format
         """
-        # first_use is for if we enter this funciton for the first time
+        # first_use is for if we enter this function for the first time
         # type is the type of the object
         # root is the parent group
         # the objects here can be a group of hosts or
@@ -84,11 +84,13 @@ class Excel_writer:
                 # if it's not a group and belong to a group
                 elif root:
                     obj = self.parser.get_obj_byName( type, member )
-                    tmp = obj.convert_to_row( root )
+                    if obj:
+                        tmp = obj.convert_to_row( root )
                 # if it doesn't belong to a group
                 else:
                     obj = self.parser.get_obj_byName( type, member )
-                    tmp = obj.convert_to_row( object.get_name() )
+                    if obj:
+                        tmp = obj.convert_to_row( object.get_name() )
 
                 if tmp:
                     self.write_row( self.row_num, tmp, self.sheet )

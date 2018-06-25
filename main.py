@@ -13,6 +13,7 @@ except ImportError:
 
 from file.parser import *
 from file.excel_writer import *
+from file.checkpoint_writer import *
 from print_x import *
 
 
@@ -58,6 +59,8 @@ def main():
     book.save( options.excel_file )
     print_done()
 
+    #checkpoint_writer = Checkpoint_writer( file_parser, "")
+    
 
 if __name__ == '__main__':
     main()

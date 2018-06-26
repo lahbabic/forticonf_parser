@@ -92,6 +92,17 @@ class File_parser():
         # list containing tuples of hosts and a list of groups they belong to
         self.tuples_h_gs = []
 
+    def groups_containing_obj( self, obj_type="", obj_name="" ):
+        """ returns all groups in which the specific object is located """
+
+        if obj_type == "host":
+            list_of_objects = self.list_of_addrGrp
+        elif obj_type == "service":
+            list_of_objects = self.list_of_srvGrp
+
+        return ' '.join([ group.get_name() for group in list_of_objects
+            if obj_name in group.get_members() ])
+
     def create_addrgrpObj( self, lines=[] ):
         """ create 'firewall addrgrp' objects """
         if not lines:
@@ -152,6 +163,8 @@ class File_parser():
 
             if command == 'edit':
                 net_addr['name'] = args[0].strip('"')
+                net_addr['member_of'] = \
+                            self.groups_containing_obj("host", net_addr['name'])
             elif command == 'set':
                 if args[0] == 'subnet':
                     net_addr['type'] = 'ipmask'
@@ -206,6 +219,8 @@ class File_parser():
 
             if command == 'edit':
                 service['service_name'] = args[0].strip('"')
+                service['member_of'] = \
+                            self.groups_containing_obj("service", service['service_name'])
             elif command == 'set':
                 try:
                     # This 3 fields can contain multiple entries
@@ -324,30 +339,30 @@ class File_parser():
             in argument to search for, and create the corresponding objects
         """
         if object_to_look_for == "hosts":
-            print("File parsing for"+B+" address"+W+" objects ...  ", end="" )
-            addrs_lines = self.file_reader.get_objects( 'address' )
-
-            print("Creating address objects ...  ", end="" )
-            self.create_addrObj( addrs_lines )
-
             print("File parsing for"+B+" addrgrp"+W+" objects ...  ", end="" )
             addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
 
             print("Creating addrgrp objects ...  ", end="" )
             self.create_addrgrpObj( addrgrp_lines )
 
+            print("File parsing for"+B+" address"+W+" objects ...  ", end="" )
+            addrs_lines = self.file_reader.get_objects( 'address' )
+
+            print("Creating address objects ...  ", end="" )
+            self.create_addrObj( addrs_lines )
+
         elif object_to_look_for == "services":
-            print("File parsing for"+B+" service custom"+W+" objects ...  ", end="" )
-            serviceC_lines = self.file_reader.get_objects( 'service custom' )
-
-            print("Creating service custom objects ...  ", end="" )
-            self.create_serviceCObj( serviceC_lines )
-
             print("File parsing for"+B+" service group"+W+" objects ...  ", end="" )
             serviceGrp_lines = self.file_reader.get_objects( 'service group' )
 
             print("Creating service group objects ...  ", end="" )
             self.create_serviceGObj( serviceGrp_lines )
+
+            print("File parsing for"+B+" service custom"+W+" objects ...  ", end="" )
+            serviceC_lines = self.file_reader.get_objects( 'service custom' )
+
+            print("Creating service custom objects ...  ", end="" )
+            self.create_serviceCObj( serviceC_lines )
 
         elif object_to_look_for == "policies":
             print("File parsing for"+B+" policy"+W+" objects ...  ", end="" )
@@ -403,8 +418,3 @@ class File_parser():
     def get_list_of_policies( self ):
         """ return a list of policy objects """
         return self.list_of_policies
-
-    def groups_containing_host( self, host="" ):
-        """ returns all groups in which a specific host is located """
-        return ' '.join([ group.get_name() for group in self.list_of_addrGrp
-            if host in group.get_members() ])

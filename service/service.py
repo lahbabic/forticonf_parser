@@ -6,7 +6,7 @@ from object import *
 class Service(Object):
     """ contain a list of used protocols and ports """
 
-    implemented_keys = ['service_name', 'tcp_portrange', 'udp_portrange',\
+    implemented_keys = ['service_name', 'member_of', 'tcp_portrange', 'udp_portrange',\
     'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
                'visibility', 'icmptype', 'icmpcode', 'category', 'comment']
 
@@ -42,7 +42,8 @@ class Service(Object):
         self.visibility = ""
         self.category = ""
         self.comment = ""
-
+        # groups that it belong to
+        self.member_of = ""
         super().__init__( tmp_dict )
 
     def get_name( self ):

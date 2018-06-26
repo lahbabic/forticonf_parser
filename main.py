@@ -45,12 +45,13 @@ def main():
         options.excel_file = options.config_file.split(".")[0]+".xls"
 
     file_parser.parse("hosts")
-    groups = file_parser.get_list_of_addrGrp()
-    excel_writer.objects_to_file( True, "hosts", "", groups )
+    #groups = file_parser.get_list_of_addrGrp()
+    hosts = file_parser.get_list_of_netAdresses()
+    excel_writer.objects_to_file( "hosts", hosts )
 
     file_parser.parse("services")
-    serviceGs = file_parser.get_list_of_Gservices()
-    excel_writer.objects_to_file( True, "services", "", serviceGs )
+    services = file_parser.get_list_of_Cservices()
+    excel_writer.objects_to_file( "services", services )
 
     file_parser.parse("policies")
     excel_writer.policies_to_file( )
@@ -60,7 +61,7 @@ def main():
     print_done()
 
     #checkpoint_writer = Checkpoint_writer( file_parser, "")
-    
+
 
 if __name__ == '__main__':
     main()

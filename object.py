@@ -45,22 +45,20 @@ class Object:
         # for key in the object implemented attributes
         for key in self.implemented_keys:
             # check if the object has the attribute 'key'
-            if hasattr(self, key):
+            if hasattr( self, key ):
                 # if so, get the attribute value and store it into the tmp
                 # dictionary with the corresponding key
-                tmp[ key ] = getattr(self, key)
+                tmp[ key ] = getattr( self, key )
                 # if the attribute value is None
                 if not tmp[ key ]:
                     tmp[ key ] = ""
         return json.dumps( tmp, indent=4 )
 
-    def convert_to_row( self , group="" ):
+    def convert_to_row( self ):
         """ return a list containing all attributes """
         row = []
         keys = self.implemented_keys
-        if group:
-            row.append( group )
-
+        # add the 'member_of' key to get the groups that the object belong to
         if self.__class__.__name__ == "Network_addr":
             # generator that create a new list from the object implemented_keys
             # list without the "type" key
@@ -73,12 +71,11 @@ class Object:
                 if not isinstance( value, list ):
                     row.append( value )
                 # if value is a list
+                elif key == 'ip':
+                    for x in value:
+                        row.append( x )
                 else:
-                    if self.__class__.__name__ == "Network_addr":
-                        for x in value:
-                            row.append( x )
-                    else:
-                        row.append( ' '.join( value ) )
+                    row.append( ' '.join( value ) )
         return row
 
     def convert_to_json( self ):

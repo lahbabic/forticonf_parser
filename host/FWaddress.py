@@ -98,18 +98,18 @@ class Iprange(Network):
 class Network_addr(Object):
     """ is the name of the network/subnet/host, his type, ip and eventually a comment """
 
-    implemented_types = ['ipmask', 'iprange']
-    unimplemented_types = ['fqdn', 'geography', 'wildcard', 'wildcard-fqdn']
-    implemented_keys = ['name', 'type', 'ip', 'comment']
+    implemented_types = [ 'ipmask', 'iprange' ]
+    unimplemented_types = [ 'fqdn', 'geography', 'wildcard', 'wildcard-fqdn' ]
+    implemented_keys = [ 'name', 'member_of', 'type', 'ip', 'comment' ]
 
     def __init__( self, tmp_dict={} ):
         self.name = ""
+        # groups that belong to
+        self.member_of = []
         self.type = ""
         ''' tuple containing ip/mask or iprange for now '''
         self.ip = None
         self.comment = ""
-        # groups that belong to
-        self.member_of_gs = ""
 
         keys = tmp_dict.keys()
         if not is_valid_ipmask(tmp_dict['ip'][0]) or not is_valid_ipmask(tmp_dict['ip'][1]):

@@ -3,11 +3,12 @@
 
 class Excel_writer:
 
-    hosts_fieldnames = ['Group', 'Hostname', 'ip/ip_start', 'netmask/ip_end', 'Description']
+    hosts_fieldnames = ['Hostname', 'Member of groups',\
+            'ip/ip_start', 'netmask/ip_end', 'Description']
 
-    services_fieldnames = ['Service Group','service_name', 'tcp_portrange', 'udp_portrange',\
-    'sctp_portrange', 'explicit_proxy', 'protocol', 'protocol_number',\
-               'visibility', 'icmptype', 'icmpcode', 'category', 'comment']
+    services_fieldnames = ['service name','member of groups', 'tcp_portrange',\
+     'udp_portrange', 'sctp_portrange', 'explicit_proxy', 'protocol',\
+      'protocol_number','visibility', 'icmptype', 'icmpcode', 'category', 'comment']
 
     policies_fieldnames = ['policy_number', 'srcintf', 'dstintf', 'srcaddr',\
                 'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
@@ -27,7 +28,6 @@ class Excel_writer:
         for index, value in enumerate( rowtw ):
             row.write( index, value )
 
-
     def policies_to_file( self ):
         """
             convert all gathered policies into csv format
@@ -44,54 +44,29 @@ class Excel_writer:
                 policy_num += 1
 
 
-    def objects_to_file( self, first_use=False, type="", root="", objects="" ):
+    def objects_to_file( self, type="", objects="" ):
         """
-            convert all gathered addresses into csv format
+            write objects( Network_addr| services ) to excel file
         """
-        # first_use is for if we enter this function for the first time
-        # type is the type of the object
-        # root is the parent group
-        # the objects here can be a group of hosts or
-        # a group of services
-        if first_use:
-            # This variable is to count the number of written rows
-            self.row_num = 1
-            fieldnames = ""
-            if type == "hosts":
-                self.sheet = self.book.add_sheet("Hosts")
-                fieldnames = self.hosts_fieldnames
-            elif type == "services":
-                self.sheet = self.book.add_sheet("Services")
-                fieldnames = self.services_fieldnames
+        # The objects here can be hosts or services
+        # This variable is to count the number of written rows
+        self.row_num = 1
+        fieldnames = ""
+        if objects[0].__class__.__name__ == "Network_addr":
+            self.sheet = self.book.add_sheet( "Hosts" )
+            fieldnames = self.hosts_fieldnames
+        elif objects[0].__class__.__name__ == "Service":
+            self.sheet = self.book.add_sheet( "Services" )
+            fieldnames = self.services_fieldnames
 
-            self.write_row( 0, fieldnames, self.sheet )
+        self.write_row( 0, fieldnames, self.sheet )
 
-        for object in objects:
-            members = object.get_members()
+        for obj in objects:
+            tmp = None
+            # obj = self.parser.get_obj_byName( type, member )
+            if obj:
+                tmp = obj.convert_to_row( )
 
-            for member in members:
-                tmp = ""
-                # if it's a group
-                """ need to update (check it's type if it's a group not his name)"""
-                if member.split("-")[0] == 'g' or member.split("-")[0] == 'sg':
-                    # Groups members of a group
-                    if type == "hosts":
-                        self.objects_to_file( False, "hosts", object.get_name(),\
-                            [self.parser.get_addrgrp_byName(member)] )
-                    elif type == "services":
-                        self.objects_to_file( False, "services", object.get_name() ,\
-                            [self.parser.get_serviceGrp_byName(member)] )
-                # if it's not a group and belong to a group
-                elif root:
-                    obj = self.parser.get_obj_byName( type, member )
-                    if obj:
-                        tmp = obj.convert_to_row( root )
-                # if it doesn't belong to a group
-                else:
-                    obj = self.parser.get_obj_byName( type, member )
-                    if obj:
-                        tmp = obj.convert_to_row( object.get_name() )
-
-                if tmp:
-                    self.write_row( self.row_num, tmp, self.sheet )
-                    self.row_num += 1
+            if tmp:
+                self.write_row( self.row_num, tmp, self.sheet )
+                self.row_num += 1

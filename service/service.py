@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*
 
-from object import *
+from object import Object
 
 """ inherite from the 'Object' class """
 class Service(Object):

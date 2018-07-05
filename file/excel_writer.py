@@ -43,7 +43,6 @@ class Excel_writer:
                 self.write_row( policy_num , row, self.sheet )
                 policy_num += 1
 
-
     def objects_to_file( self, type="", objects="" ):
         """
             write objects( Network_addr| services ) to excel file

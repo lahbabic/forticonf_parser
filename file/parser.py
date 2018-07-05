@@ -326,7 +326,6 @@ class File_parser():
                     if field not in unimplemented_fields:
                         print_warning()
                         print("Can't set the field "+B+field+W+", not implemented yet")
-                        print(args)
                         unimplemented_fields.append( field )
             elif command == 'next':
                 policy_obj = Policy( policy )
@@ -341,7 +340,6 @@ class File_parser():
             print("Can't sort policies")
         print_done()
 
-
     def parse( self, object_to_look_for="" ):
         """
             get lines from file that match the object specified
@@ -350,35 +348,45 @@ class File_parser():
         if object_to_look_for == "hosts":
             print("File parsing for"+B+" addrgrp"+W+" objects ...  ", end="" )
             addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
-
-            print("Creating addrgrp objects ...  ", end="" )
-            self.create_addrgrpObj( addrgrp_lines )
+            if not addrgrp_lines:
+                print("Their is no address group objects")
+            else:
+                print("Creating addrgrp objects ...  ", end="" )
+                self.create_addrgrpObj( addrgrp_lines )
 
             print("File parsing for"+B+" address"+W+" objects ...  ", end="" )
             addrs_lines = self.file_reader.get_objects( 'address' )
-
-            print("Creating address objects ...  ", end="" )
-            self.create_addrObj( addrs_lines )
+            if not addrs_lines:
+                print("Their is no address objects")
+            else:
+                print("Creating address objects ...  ", end="" )
+                self.create_addrObj( addrs_lines )
 
         elif object_to_look_for == "services":
             print("File parsing for"+B+" service group"+W+" objects ...  ", end="" )
             serviceGrp_lines = self.file_reader.get_objects( 'service group' )
-
-            print("Creating service group objects ...  ", end="" )
-            self.create_serviceGObj( serviceGrp_lines )
+            if not serviceGrp_lines:
+                print("Their is no service group objects")
+            else:
+                print("Creating service group objects ...  ", end="" )
+                self.create_serviceGObj( serviceGrp_lines )
 
             print("File parsing for"+B+" service custom"+W+" objects ...  ", end="" )
             serviceC_lines = self.file_reader.get_objects( 'service custom' )
-
-            print("Creating service custom objects ...  ", end="" )
-            self.create_serviceCObj( serviceC_lines )
+            if not serviceGrp_lines:
+                print("Their is no service custom objects")
+            else:
+                print("Creating service custom objects ...  ", end="" )
+                self.create_serviceCObj( serviceC_lines )
 
         elif object_to_look_for == "policies":
             print("File parsing for"+B+" policy"+W+" objects ...  ", end="" )
             policies_lines = self.file_reader.get_objects( 'policy' )
-
-            print("Creating policy objects ...  ", end="" )
-            self.create_policyObj( policies_lines )
+            if not policies_lines:
+                print("Their is no policy objects")
+            else:
+                print("Creating policy objects ...  ", end="" )
+                self.create_policyObj( policies_lines )
 
 
     def get_addrgrp_byName( self, name="" ):

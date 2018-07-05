@@ -301,15 +301,18 @@ class File_parser():
         policy = {}
         command = ""
         args = []
-
         for line in lines:
+            if not line:
+                pass
             try:
                 command, *args = line.split()
             except:
                 pass
-
             if command == 'edit':
-                policy['policy_number'] = args[0].strip('"')
+                try:
+                    policy['policy_number'] = int(args[0].strip('"'))
+                except:
+                    print('not a valid id:' + policy['policy_number'])
             elif command == 'set':
                 # the field must be in implemented_fields
                 field = args.pop(0)
@@ -323,13 +326,19 @@ class File_parser():
                     if field not in unimplemented_fields:
                         print_warning()
                         print("Can't set the field "+B+field+W+", not implemented yet")
+                        print(args)
                         unimplemented_fields.append( field )
             elif command == 'next':
                 policy_obj = Policy( policy )
-                self.list_of_policies.append( policy_obj )
+                if self.get_policy_id(policy_obj) != 0:
+                    self.list_of_policies.append(policy_obj)
                 policy.clear()
         # sort policies by id
-        self.list_of_policies = sorted( self.list_of_policies, key=self.get_policy_id )
+        try:
+            self.list_of_policies = sorted( self.list_of_policies, key=self.get_policy_id )
+        except:
+            print_warning()
+            print("Can't sort policies")
         print_done()
 
 

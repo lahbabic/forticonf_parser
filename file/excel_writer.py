@@ -30,7 +30,7 @@ class Excel_writer:
 
     def policies_to_file( self ):
         """
-            convert all gathered policies into csv format
+            write policy objects to excel file
         """
         self.sheet = self.book.add_sheet("Policies")
 
@@ -52,6 +52,8 @@ class Excel_writer:
         # This variable is to count the number of written rows
         self.row_num = 1
         fieldnames = ""
+        if not objects:
+            return 1
         if objects[0].__class__.__name__ == "Network_addr":
             self.sheet = self.book.add_sheet( "Hosts" )
             fieldnames = self.hosts_fieldnames

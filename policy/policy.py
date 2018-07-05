@@ -16,7 +16,7 @@ class Policy(Object):
                 'global_label', 'nat', 'status', 'comments', 'ippool', 'poolname']
 
     def __init__(self, tmp_dict={}):
-        self.policy_number = ""
+        self.policy_number = 0
         self.srcintf = []
         self.dstintf = []
         self.srcaddr = ""
@@ -35,10 +35,4 @@ class Policy(Object):
         super().__init__( tmp_dict )
 
     def get_id( self ):
-        try:
-            id = int(self.policy_number)
-            return id
-        except:
-            print_warning()
-            print("the policy id "+B+self.policy_number+W+\
-                " is not an integer, it can't be sorted")
+        return self.policy_number

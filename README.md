@@ -1,2 +1,5 @@
-# fortinet_conf_parser
-convert a fortinet configuration file into csv file
+# fortigate configuration file parser
+
+Extract objects from a FortiGate configuration file.
+Create an excel document with the corresponding objects.
+

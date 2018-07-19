@@ -3,7 +3,7 @@
 
 class Excel_writer:
 
-    hosts_fieldnames = ['Hostname', 'Member of groups',\
+    hosts_fieldnames = ['Hostname', 'Member of group',\
             'ip/ip_start', 'netmask/ip_end', 'Description']
 
     services_fieldnames = ['service name','member of groups', 'tcp_portrange',\

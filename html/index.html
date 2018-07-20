@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentation Forticonf Parser 0.0.1 &#8212; documentation forticonf parser 0.0.1-unstable</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="top" title="documentation forticonf parser 0.0.1-unstable" href="#" />
+    <link rel="next" title="Prérequis" href="prerequis.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="prerequis.html" title="Prérequis"
+             accesskey="N">suivant</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">documentation forticonf parser 0.0.1-unstable</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation-forticonf-parser-0-0-1">
+<h1>Documentation Forticonf Parser 0.0.1<a class="headerlink" href="#documentation-forticonf-parser-0-0-1" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Bienvenue sur la documentation de Forticonf Parser 0.0.1.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
+<p><strong>Forticonf Parser</strong> a été developé dans le but de faciliter la lecture des fichiers de configuration des firewalls FortiGate du constructeur <a class="reference external" href="https://www.fortinet.com">Fortinet</a>.</p>
+<p>Dans certaines circonstances, il est possible qu&#8217;on ait besoin de savoir les différents objets que contient un fichier de configuration; comme par exemple les machines, les réseaux, les groupes de réseaux, les services ou groupes de services ou encore les politiques de sécurité appliqués à ces objets.</p>
+<p>Généralement un fichier de configuration Fortigate contient environ 6000 lignes, avec une syntaxe que l&#8217;on ne comprend pas forcement.</p>
+<p>Dans d&#8217;autres cas, même en connaissant la syntaxe, il s&#8217;avère difficile de repérer un objet spécifique. Par exemple un groupe de services peut contenir d&#8217;autres groupes de services qui eux-mêmes peuvent contenir d&#8217;autres groupes de services. Il est donc possible de perdre facilement le fil au milieu de tous ces objets.</p>
+<p><em>Forticonf parser</em> facilite la lecture de ces fichiers de configuration en exportant ces objets dans un format plus lisible qui est le <em>format excel</em>.</p>
+</div>
+<div class="section" id="table-des-matieres">
+<h2>Table des matières<a class="headerlink" href="#table-des-matieres" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="prerequis.html">Prérequis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prerequis.html#installer-python">Installer Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequis.html#installer-les-modules-requis">Installer les modules requis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilisation.html">Utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#linux-debian">Linux (debian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#aide">Aide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specifications.html">Spécifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specifications.html#vocabulaire">Vocabulaire</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specifications.html#quels-sont-les-paquetages-de-forticonf-parser">Quels sont les paquetages de Forticonf parser?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specifications.html#quels-sont-les-modules-composant-ces-paquetages">Quels sont les modules composant ces paquetages?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="index-et-tables-des-matieres">
+<h1>Index et tables des matières :<a class="headerlink" href="#index-et-tables-des-matieres" title="Lien permanent vers ce titre">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Index du module</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Page de recherche</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table des Matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Documentation Forticonf Parser 0.0.1</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#table-des-matieres">Table des matières</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index-et-tables-des-matieres">Index et tables des matières :</a></li>
+</ul>
+
+  <h4>Sujet suivant</h4>
+  <p class="topless"><a href="prerequis.html"
+                        title="Chapitre suivant">Prérequis</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Cette page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Montrer le code source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="prerequis.html" title="Prérequis"
+             >suivant</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">documentation forticonf parser 0.0.1-unstable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Chems Eddine Lahbabi.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Prérequis &#8212; documentation forticonf parser 0.0.1-unstable</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="top" title="documentation forticonf parser 0.0.1-unstable" href="index.html" />
+    <link rel="next" title="Utilisation" href="utilisation.html" />
+    <link rel="prev" title="Documentation Forticonf Parser 0.0.1" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="utilisation.html" title="Utilisation"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation Forticonf Parser 0.0.1"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation forticonf parser 0.0.1-unstable</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="prerequis">
+<h1>Prérequis<a class="headerlink" href="#prerequis" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Forticonf parser fonctionne en utilisant Python =&gt; v3.0.</p>
+<div class="section" id="installer-python">
+<h2>Installer Python<a class="headerlink" href="#installer-python" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Il est très probable que la version 2.0 de python soit déjà installé sur votre machine.
+Pour utiliser ce script il nous faudra une version supérieure ou égale à la version 3.0.</p>
+<div class="section" id="linux-debian">
+<h3>Linux (debian)<a class="headerlink" href="#linux-debian" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Afin de savoir si la version 3 de python est installé sur votre machine, ouvrez une console et tapez la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 --version
+<span class="go">Python 3.5.3</span>
+</pre></div>
+</div>
+<p>Afin d&#8217;installer Python3 et pip3 sur votre machine tapez la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo aptitude install python3 python3-pip
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Vous pouvez télécharger Python pour Windows sur le site web <a class="reference external" href="https://www.python.org/downloads/windows/">python.org</a> ou télécharger la version 3.5.3 en cliquant sur le lien <a class="reference external" href="https://www.python.org/ftp/python/3.5.3/python-3.5.3.exe">python-3.5.3</a> .</p>
+<p>Après avoir téléchargé le fichier .exe, lancez-le et suivez les instructions pour l&#8217;installer.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Cochez la case &#8220;Ajouter Python 3.5 au chemin&#8221;&nbsp;| &#8220;Add Python 3.5 to PATH&#8221;</p>
+<p class="last">Notez le chemin ou il va être installé. Vous en aurez besoin plutard afin de le lancer.</p>
+</div>
+</div>
+</div>
+<div class="section" id="installer-les-modules-requis">
+<h2>Installer les modules requis<a class="headerlink" href="#installer-les-modules-requis" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le lien github pour récupérer le script se trouve à l&#8217;adresse suivante: <a class="reference external" href="https://github.com/lahbabic/forticonf_parser.git">forticonf_parser</a></p>
+<div class="section" id="telecharger-le-script-et-installer-les-dependances">
+<h3>Télécharger le script et installer les dépendances<a class="headerlink" href="#telecharger-le-script-et-installer-les-dependances" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id1">
+<h4>Linux (debian)<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h4>
+<p><strong>Télécharger le script</strong></p>
+<p>Vous pouvez télécharger le script soit manuellement, dans ce cas vous aurez un fichier .zip que vous devrez décompresser.</p>
+<p>La deuxième méthode est en utilisant la commande <strong>git</strong>.</p>
+<p>Si vous n&#8217;avez pas git d&#8217;installé, ouvrez une console puis taper la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo aptitude install git
+</pre></div>
+</div>
+<p>Après avoir installé git, vous pouvez à présent télécharger le script à l&#8217;aide de la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/lahbabic/forticonf_parser.git
+</pre></div>
+</div>
+<p>Une fois cela effectué, naviguez dans le dossier <em>forticonf_parser</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> forticonf_parser
+</pre></div>
+</div>
+<p><strong>Installer les dépendances</strong></p>
+<p>Ouvrez une console et tapez la commande suivante pour installer les dépendances:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> pip3 install -r requirements.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h4>Windows<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h4>
+<p><strong>Télécharger le script</strong></p>
+<p>Sur Windows vous pouvez télécharger le script sur la page:</p>
+<p><cite>github.com/lahbabic/forticonf_parser.git</cite></p>
+<p>Une fois le script téléchargé, décompressez le fichier .zip.</p>
+<p>Ouvrez une console &#8220;cmd.exe&#8221; et naviguez au dossier <em>forticonf_parser-master</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">C:\Users\username\&gt;cd Downloads\forticonf_parser-master</span>
+</pre></div>
+</div>
+<p><strong>Installer les dépendances</strong></p>
+<p>Premièrement vous aurez besoin de mettre à jour <em>pip</em>. Utilisez la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">C:\Users\username\Downloads\forticonf_parser-master&gt;python -m pip install --upgrade pip</span>
+</pre></div>
+</div>
+<p>Puis installez les dépendances en utilisant la commande suivante:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">C:\Users\username\Downloads\forticonf_parser-master&gt;pip install -r requirements.txt</span>
+</pre></div>
+</div>
+<p>Vous pouvez à présent utiliser le script.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table des Matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Prérequis</a><ul>
+<li><a class="reference internal" href="#installer-python">Installer Python</a><ul>
+<li><a class="reference internal" href="#linux-debian">Linux (debian)</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installer-les-modules-requis">Installer les modules requis</a><ul>
+<li><a class="reference internal" href="#telecharger-le-script-et-installer-les-dependances">Télécharger le script et installer les dépendances</a><ul>
+<li><a class="reference internal" href="#id1">Linux (debian)</a></li>
+<li><a class="reference internal" href="#id2">Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Sujet précédent</h4>
+  <p class="topless"><a href="index.html"
+                        title="Chapitre précédent">Documentation Forticonf Parser 0.0.1</a></p>
+  <h4>Sujet suivant</h4>
+  <p class="topless"><a href="utilisation.html"
+                        title="Chapitre suivant">Utilisation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Cette page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/prerequis.txt"
+            rel="nofollow">Montrer le code source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="utilisation.html" title="Utilisation"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation Forticonf Parser 0.0.1"
+             >précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation forticonf parser 0.0.1-unstable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Chems Eddine Lahbabi.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

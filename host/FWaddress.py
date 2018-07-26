@@ -10,7 +10,6 @@ from print_x import *
     source: http://help.fortinet.com/cli/fos50hlp/54/Content/FortiOS/fortiOS-cli-ref-54/config/firewall/address.htm """
 
 
-
 def is_valid_ipmask(ipmask):
     """ check if ipv4/6 and mask are valid """
     try:

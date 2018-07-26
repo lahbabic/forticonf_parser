@@ -4,9 +4,11 @@ import json
 
 class Object:
 
-    def __init__( self, dict={} ):
+    def __init__( self, tmp_dict=None ):
         """ set all object attributes """
-        keys = dict.keys()
+        if tmp_dict is None:
+            tmp_dict = {}
+        keys = tmp_dict.keys()
         # for each key in the dictionary keys
         for key in keys:
             attr = key
@@ -18,7 +20,7 @@ class Object:
             # if the object has this attribute
             if hasattr( self, attr ):
                 # set his attribute with the corresponding value
-                setattr( self, attr, dict[ key ] )
+                setattr( self, attr, tmp_dict[ key ] )
 
     def __str__( self ):
         """ create a printable representation of this object """
@@ -39,7 +41,7 @@ class Object:
 
     def get_attrs( self ):
         """
-            return all attribute in a dictionary
+            return all attributes in a dictionary
         """
         tmp = {}
         # for key in the object implemented attributes

@@ -26,7 +26,7 @@ class File_reader():
                 yield line
             # when we finish form reading the file, close it
             file.close()
-        except OSError:
+        except :
             print_err()
             print("Failed to process file \n")
             exit(1)

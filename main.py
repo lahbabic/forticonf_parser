@@ -13,7 +13,7 @@ except ImportError:
 
 from file.parser import *
 from file.excel_writer import *
-from file.jinja_writer import *
+from file.checkpoint_writer import *
 from print_x import *
 
 
@@ -42,6 +42,7 @@ def main():
         missing_arguments("You should provide a configuration file as an argument using -f.")
 
     if options.excel_file is None:
+        print(options.config_file)
         options.excel_file = options.config_file.split(".")[0]+".xls"
 
     file_parser.parse("hosts")

@@ -3,21 +3,17 @@
 
 import sys
 from optparse import OptionParser
-try:
-    import xlwt
-except ImportError:
-    print("No module named 'xlwt'")
-    print("Please try to install it using the following command:")
-    print("pip3 install xlwt")
-    exit(1)
+
 
 from file.parser import *
 from file.excel_writer import *
 from file.checkpoint_writer import *
+from file.mgmt_cli_writer import *
+
 from print_x import *
 
 
-def missing_arguments( msg="" ):
+def error_msg( msg="" ):
     print(msg)
     print("Please use -h for more information.")
     print("\t"+sys.argv[0]+ " -h")
@@ -27,42 +23,50 @@ def main():
 
     option_parser = OptionParser()
     option_parser.add_option("-f", "--file", dest="config_file",
-                      help="fortinet configuration file to parse", metavar="FILE")
-    option_parser.add_option("-o", "--output", dest="excel_file",
-                      help="excel output FILE which will contain three sheets\
+                      help="Fortinet configuration file to parse", metavar="FILE")
+    option_parser.add_option("-e", "--excel_file", dest="excel_file",
+                      help="Excel output FILE which will contains three sheets\
                       ( hosts, services and policies )[default FILE.xls]",
+                      metavar="FILE")
+    option_parser.add_option("-m", "--mgmt_cli", dest="mgmt_cli_file",
+                      help="Output FILE which will contains\
+                      mgmt_cli commands",
                       metavar="FILE")
     (options, args) = option_parser.parse_args()
 
     if options.config_file is not None:
         file_parser = File_parser( options.config_file )
-        book = xlwt.Workbook()
-        excel_writer = Excel_writer( file_parser, book )
+        file_format = None
     else:
-        missing_arguments("You should provide a configuration file as an argument using -f.")
+        error_msg("You should provide a configuration file as an argument using -f.")
 
-    if options.excel_file is None:
+    if options.excel_file is not None and options.mgmt_cli_file is not None:
+        error_msg("To many arguments.")
+    elif options.excel_file is None and options.mgmt_cli_file is None:
         print(options.config_file)
         options.excel_file = options.config_file.split(".")[0]+".xls"
+        file_format = (options.excel_file, "excel")
+    elif options.excel_file is not None and options.mgmt_cli_file is None:
+        file_format = (options.excel_file, "excel")
+    elif options.excel_file is None and options.mgmt_cli_file is not None:
+        file_format = (options.mgmt_cli_file, "mgmt_cli")
+    else:
+        error_msg("Failed to parse arguments.")
 
-    file_parser.parse("hosts")
-    #groups = file_parser.get_list_of_addrGrp()
-    hosts = file_parser.get_list_of_netAdresses()
-    excel_writer.objects_to_file( "hosts", hosts )
+    file_parser.parse()
 
-    file_parser.parse("services")
-    services = file_parser.get_list_of_Cservices()
-    excel_writer.objects_to_file( "services", services )
+    if file_format[1] == "excel":
+        excel_writer = Excel_writer( file_parser, file_format[0] )
+        excel_writer.write_objects()
 
-    file_parser.parse("policies")
-    excel_writer.policies_to_file( )
-
-    print("Writing objects to file "+ options.excel_file + " ...  ",end="")
-    book.save( options.excel_file )
-    print_done()
-
-    #checkpoint_writer = Checkpoint_writer( file_parser, "")
+    elif file_format[1] == "mgmt_cli":
+        mgmt_cli_writer = Mgmt_cli_writer(file_parser, "")
+        mgmt_cli_writer.write_specific_policies()
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as im:
+        print_err()
+        print(im)

@@ -1,5 +1,13 @@
 #-*- coding: utf-8 -*
 
+from print_x import *
+try:
+    import xlwt
+except ImportError:
+    print("No module named 'xlwt'")
+    print("Please try to install it using the following command:")
+    print("pip3 install xlwt")
+    exit(1)
 
 class Excel_writer:
 
@@ -14,10 +22,21 @@ class Excel_writer:
                 'dstaddr', 'action', 'schedule', 'service', 'logtraffic',\
                 'global_label', 'nat', 'status', 'comments', 'ippool', 'poolname']
 
-    def __init__( self, parser=None, book=None ):
+    def __init__( self, parser=None, file_name="" ):
         self.parser = parser
-        self.book = book
+        self.book = xlwt.Workbook()
+        self.file_name = file_name
 
+    def write_objects( self ):
+        hosts = self.parser.get_list_of_netAdresses()
+        self.objects_to_file( "hosts", hosts )
+        services = self.parser.get_list_of_Cservices()
+        self.objects_to_file( "services", services )
+        self.policies_to_file()
+
+        print("Writing objects to file "+ self.file_name + " ...  ",end="")
+        self.book.save( self.file_name )
+        print_done()
 
     def write_row( self, row_num="", rowtw=[], sheet=None ):
         """
@@ -37,6 +56,9 @@ class Excel_writer:
         policy_num = 1
         self.write_row( 0, self.policies_fieldnames, self.sheet )
         policies = self.parser.get_list_of_policies()
+        if policies is None:
+            return 1
+
         for policy in policies:
             if policy != None:
                 row = policy.convert_to_row()
@@ -66,7 +88,7 @@ class Excel_writer:
             tmp = None
             # obj = self.parser.get_obj_byName( type, member )
             if obj:
-                tmp = obj.convert_to_row( )
+                tmp = obj.convert_to_row()
 
             if tmp:
                 self.write_row( self.row_num, tmp, self.sheet )

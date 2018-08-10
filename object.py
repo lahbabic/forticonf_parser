@@ -23,7 +23,8 @@ class Object:
                 setattr( self, attr, tmp_dict[ key ] )
 
     def __str__( self ):
-        """ create a printable representation of this object """
+        """ overwrite __str__ method,
+            create a printable representation of this object """
         ret = ""
         for key in self.implemented_keys:
             if hasattr(self, key):
@@ -54,7 +55,8 @@ class Object:
                 # if the attribute value is None
                 if not tmp[ key ]:
                     tmp[ key ] = ""
-        return json.dumps( tmp, indent=4 )
+        #return json.dumps( tmp, indent=4 )
+        return tmp
 
     def convert_to_row( self ):
         """ return a list containing all attributes """

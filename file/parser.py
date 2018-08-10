@@ -79,7 +79,7 @@ class File_parser():
         self.file_reader = File_reader( file_name )
         # list containing Network_addr objects
         self.list_of_netAddresses = []
-        # list containing Address_group objects
+        # list containing Address_grsoup objects
         self.list_of_addrGrp = []
         # list containing the members of a group
         self.list_of_members = []
@@ -92,7 +92,7 @@ class File_parser():
         # list containing tuples of hosts and a list of groups they belong to
         self.tuples_h_gs = []
 
-    def groups_containing_obj( self, obj_type="", obj_name="" ):
+    def groups_containing_obj(self, obj_type="", obj_name=""):
         """ returns all groups in which the specific object is located """
 
         if obj_type == "host":
@@ -103,7 +103,7 @@ class File_parser():
         return ' '.join([ group.get_name() for group in list_of_objects
             if obj_name in group.get_members() ])
 
-    def create_addrgrpObj( self, lines=[] ):
+    def create_addrgrpObj(self, lines=[]):
         """ create 'firewall addrgrp' objects """
         if not lines:
             return None
@@ -138,8 +138,7 @@ class File_parser():
                 args, addrgrp_list = [], []
         print_done()
 
-
-    def create_addrObj( self, lines=[] ):
+    def create_addrObj(self, lines=[]):
         """
             create network address objects from lines
             'firewall address'
@@ -197,7 +196,7 @@ class File_parser():
                     unimplemented_commands.append( command )
         print_done()
 
-    def create_serviceCObj( self, lines=[] ):
+    def create_serviceCObj(self, lines=[]):
         """ create 'firewall service custom' objects """
         if not lines:
             return None
@@ -252,8 +251,7 @@ class File_parser():
                     unimplemented_commands.append( command )
         print_done()
 
-
-    def create_serviceGObj( self, lines=[] ):
+    def create_serviceGObj(self, lines=[]):
         """ create 'service group' objects """
         if not lines:
             return None
@@ -283,11 +281,11 @@ class File_parser():
                 args, serv_list = [], []
         print_done()
 
-    def get_policy_id( self, policy ):
+    def get_policy_id(self, policy):
         """ return the id of the policy, used for sorting """
         return policy.get_id()
 
-    def create_policyObj( self, lines=[] ):
+    def create_policyObj(self, lines=[]):
         """ create 'policy' objects """
         if not lines:
             return None
@@ -340,12 +338,18 @@ class File_parser():
             print("Can't sort policies")
         print_done()
 
-    def parse( self, object_to_look_for="" ):
+    def parse(self, object_to_look_for=""):
         """
             get lines from file that match the object specified
             in argument to search for, and create the corresponding objects
         """
-        if object_to_look_for == "hosts":
+        if object_to_look_for == "":
+            """ fetch all objects """
+            self.parse("hosts")
+            self.parse("services")
+            self.parse("policies")
+
+        elif object_to_look_for == "hosts":
             print("File parsing for"+B+" addrgrp"+W+" objects ...  ", end="" )
             addrgrp_lines = self.file_reader.get_objects( 'addrgrp' )
             if not addrgrp_lines:
@@ -388,22 +392,21 @@ class File_parser():
                 print("Creating policy objects ...  ", end="" )
                 self.create_policyObj( policies_lines )
 
-
-    def get_addrgrp_byName( self, name="" ):
+    def get_addrgrp_byName(self, name=""):
         """ return addrgrp object that has the name given in argument """
         for addrgrp in self.list_of_addrGrp:
             if addrgrp.get_name() == name:
                 return addrgrp
         return None
 
-    def get_serviceGrp_byName( self, name="" ):
+    def get_serviceGrp_byName(self, name=""):
         """ return service group object that has the name given in argument """
         for serviceG in self.list_of_srvGrp:
             if serviceG.get_name() == name:
                 return serviceG
         return None
 
-    def get_obj_byName( self, type="", name=""):
+    def get_obj_byName(self, type="", name=""):
         """ return object that has the name and the type given in argument """
         if type == "hosts":
             for net_addr in self.list_of_netAddresses:
@@ -416,22 +419,22 @@ class File_parser():
                     return service
             return None
 
-    def get_list_of_netAdresses( self ):
+    def get_list_of_netAdresses(self):
         """ return a list of network address objects """
         return self.list_of_netAddresses
 
-    def get_list_of_addrGrp( self ):
+    def get_list_of_addrGrp(self):
         """ return a list of address group objects """
         return self.list_of_addrGrp
 
-    def get_list_of_Cservices( self ):
+    def get_list_of_Cservices(self):
         """ return a list of service custom objects """
         return self.list_of_services
 
-    def get_list_of_Gservices( self ):
+    def get_list_of_Gservices(self):
         """ return a list of service Group objects """
         return self.list_of_srvGrp
 
-    def get_list_of_policies( self ):
+    def get_list_of_policies(self):
         """ return a list of policy objects """
         return self.list_of_policies

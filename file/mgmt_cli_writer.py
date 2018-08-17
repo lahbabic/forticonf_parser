@@ -1,83 +1,109 @@
-#-*- coding: utf-8 -*
+ #-*- coding: utf-8 -*
+
+from print_x import *
 
 class Mgmt_cli_writer:
 
     def __init__(self, parser=None, file_name=""):
         self.parser = parser
-        self.file_name = ""
-        attrs_to_mgmt_cli = {
-            "" : "",
-            "" : ""
-        }
+        self.file_name = file_name
+        self.created_hosts = []
 
     def check_if_host(self, ip_mask=""):
         " Return True if the address is a host"
         if ip_mask is None:
-            return False
+            return None
         if ip_mask[1] == "255.255.255.255":
-            return True
+            return "host"
         else:
-            return False
+            return "net"
 
-    def get_addresses(self, addresses="", tmp=[]):
-        if addresses is None:
+
+    def get_objects(self, objects="", type="", tmp=[]):
+        " Return a list of addresses or services by retrieving their name"
+        if objects is None:
             return tmp
 
-        for addr in addresses:
-            addr_obj = self.parser.get_obj_byName("hosts", addr)
-            if addr_obj is None:
-                addr_grp_obj = self.parser.get_addrgrp_byName(addr)
-                if addr_grp_obj is None:
-                    return None
-                return self.get_addresses(addr_grp_obj.get_members(), tmp)
-            tmp.append( addr_obj )
+        for obj_name in objects:
+            obj = self.parser.get_obj_byName(type, obj_name)
+            if obj is None:
+                grp = None
+                if type == "hosts":
+                    grp = self.parser.get_addrgrp_byName(obj_name)
+                elif type == "services":
+                    grp = self.parser.get_serviceGrp_byName(obj_name)
+                if grp is None:
+                    return tmp
+                return self.get_objects(grp.get_members(), type, tmp)
+            tmp.append(obj)
         return tmp
+
 
     def addr_to_mgmt_cli(self, addr=""):
         if not addr:
             return None
         is_host = self.check_if_host( addr.ip )
 
+        addr = addr.get_attrs()
+        if addr['name'] in self.created_hosts:
+            return None
+
         command = 'mgmt_cli add '
-        if is_host:
+        if is_host == "host":
             command += 'host name'
-            addr = addr.get_attrs()
             command += ' "'+ addr["name"] +'"'
             command += ' ip-address "'+ addr["ip"][0] + '"'
             command += ' '
-        else:
+        elif is_host == "net":
             command += 'network name'
-            addr = addr.get_attrs()
             command += ' "'+ addr["name"] +'"'
             command += ' subnet "'+ addr["ip"][0] + '"'
             command += ' subnet-mask "'+ addr["ip"][1] + '"'
+
+        self.created_hosts.append(addr['name'] )
         return command
 
 
     def policy_to_mgmt_cli(self, policy=""):
-        """
-        """
+
         src_addresses = policy["srcaddr"].split()
         dst_addresses = policy["dstaddr"].split()
-        #convert this names into ip addresses
-        src_addrs = self.get_addresses( src_addresses )
-        dst_addrs = self.get_addresses( dst_addresses )
-        try:
-            print(src_addrs)
-            print(dst_addrs)
-            print(len(src_addrs)+len(dst_addrs))
-            print(len(src_addrs + dst_addrs))
-        except:
-            print(policy)
+        services = policy["service"].split()
+        print(policy["policy_number"])
+        #get host or services names if their is a group get his members
+        src_addrs = self.get_objects( src_addresses, "hosts", [] )
+        dst_addrs = self.get_objects( dst_addresses, "hosts", [] )
+        srvs = self.get_objects( services, "services", [] )
+
+        [ print(addr.get_name()) for addr in dst_addrs ]
+        print("\n_________________________\n")
+        p = "add access-rule layer network position bottom "
+        p += "action " + policy["action"] + " "
+        p += "destination " + " ".join([ addr.get_name() for addr in dst_addrs ])
+        p += " source " + " ".join([ addr.get_name() for addr in src_addrs ])
+        p += " service " + " ".join([srv.get_name() for srv in srvs ])
+
         for addr in src_addrs + dst_addrs:
             command = self.addr_to_mgmt_cli(addr)
-            yield addr
-
+            if command is not None:
+                yield command
+        yield p
 
     def write_specific_policies(self):
+        try:
+            # open the file
+            file = open( str(self.file_name), 'w+', encoding='utf-8')
 
-        for cmd in self.spec_policies_to_mgmt_cli():
-            print(cmd)
+            for cmd in self.spec_policies_to_mgmt_cli():
+                file.write(cmd)
+                file.write("\n")
+
+            file.close()
+        except :
+            print_err()
+            print("Failed to process file \n")
+            exit(1)
+
 
 
 
@@ -104,7 +130,7 @@ class Mgmt_cli_writer:
             for command in self.policy_to_mgmt_cli( policy_dict ):
                 yield command
 
-            """#get source addresses (names)
+        """#get source addresses (names)
             src_addresses = policy_dict["srcaddr"].split()
             #convert this names into ip addresses
             tmp_addresses = self.get_addresses( src_addresses )

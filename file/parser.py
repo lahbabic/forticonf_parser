@@ -19,7 +19,7 @@ class File_reader():
         """ function that returns line by line during file reading """
         try:
             # open the file
-            file = open( str( self.file_name ), 'r', encoding='utf-8')
+            file = open( str(self.file_name), 'r', encoding='utf-8')
             # for each line in the file
             for line in file:
                 # yield (return) the line

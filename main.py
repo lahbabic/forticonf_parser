@@ -34,11 +34,7 @@ def main():
                       metavar="FILE")
     (options, args) = option_parser.parse_args()
 
-    if options.config_file is not None:
-        file_parser = File_parser( options.config_file )
-        file_format = None
-    else:
-        error_msg("You should provide a configuration file as an argument using -f.")
+    file_format = None
 
     if options.excel_file is not None and options.mgmt_cli_file is not None:
         error_msg("To many arguments.")
@@ -48,10 +44,15 @@ def main():
         file_format = (options.excel_file, "excel")
     elif options.excel_file is not None and options.mgmt_cli_file is None:
         file_format = (options.excel_file, "excel")
-    elif options.excel_file is None and options.mgmt_cli_file is not None:
+    elif options.mgmt_cli_file is not None and options.excel_file is None:
         file_format = (options.mgmt_cli_file, "mgmt_cli")
     else:
         error_msg("Failed to parse arguments.")
+
+    if options.config_file is not None:
+        file_parser = File_parser( options.config_file )
+    else:
+        error_msg("You should provide a configuration file as an argument using -f.")
 
     file_parser.parse()
 
@@ -60,7 +61,7 @@ def main():
         excel_writer.write_objects()
 
     elif file_format[1] == "mgmt_cli":
-        mgmt_cli_writer = Mgmt_cli_writer(file_parser, "")
+        mgmt_cli_writer = Mgmt_cli_writer( file_parser, file_format[0] )
         mgmt_cli_writer.write_specific_policies()
 
 
